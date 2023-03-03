@@ -16,7 +16,6 @@ public class BookStore {
     private final BookRepository bookRepository;
 
     public List<Book> findAll() {
-        List<Book> books = toBooks(toList(bookRepository.findAll()));
-        return books;
+        return toBooks(toList(bookRepository.findAll()));
     }
 }
