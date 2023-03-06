@@ -16,7 +16,7 @@ class BookEntityMapperTest {
         final var book = toBook(bookEntity);
 
         assertEquals(bookEntity.getId(), book.getId());
-        assertEquals(bookEntity.getName(), book.getName());
+        assertEquals(bookEntity.getTitle(), book.getTitle());
     }
 
     @Test

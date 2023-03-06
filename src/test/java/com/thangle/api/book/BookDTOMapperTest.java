@@ -15,7 +15,7 @@ public class BookDTOMapperTest {
         final var bookDTO = toBookDTO(book);
 
         assertEquals(book.getId(), bookDTO.getId());
-        assertEquals(book.getName(), bookDTO.getName());
+        assertEquals(book.getTitle(), bookDTO.getTitle());
     }
 
     @Test

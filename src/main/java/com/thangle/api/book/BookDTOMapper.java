@@ -12,7 +12,7 @@ public class BookDTOMapper {
     public static BookDTO toBookDTO(final Book book) {
         return BookDTO.builder()
                 .id(book.getId())
-                .name(book.getName())
+                .title(book.getTitle())
                 .build();
     }
 

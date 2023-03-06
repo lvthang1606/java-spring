@@ -32,7 +32,7 @@ class BookServiceTest {
 
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.get(0).getId(), actual.get(0).getId());
-        assertEquals(expected.get(0).getName(), actual.get(0).getName());
+        assertEquals(expected.get(0).getTitle(), actual.get(0).getTitle());
 
         verify(bookStore).findAll();
     }

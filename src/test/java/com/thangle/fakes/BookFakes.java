@@ -16,7 +16,7 @@ public class BookFakes {
     public static Book buildBook() {
         return Book.builder()
                 .id(UUID.randomUUID())
-                .name(RandomStringUtils.randomAlphabetic(3, 10))
+                .title(RandomStringUtils.randomAlphabetic(3, 10))
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class BookFakes {
     public static BookEntity buildBookEntity() {
         return BookEntity.builder()
                 .id(UUID.randomUUID())
-                .name(RandomStringUtils.randomAlphabetic(3, 10))
+                .title(RandomStringUtils.randomAlphabetic(3, 10))
                 .build();
     }
 

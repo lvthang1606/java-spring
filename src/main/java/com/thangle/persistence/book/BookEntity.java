@@ -20,5 +20,5 @@ public class BookEntity {
 
     @Id
     private UUID id;
-    private String name;
+    private String title;
 }

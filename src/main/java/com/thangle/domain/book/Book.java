@@ -9,5 +9,5 @@ import java.util.UUID;
 @Builder
 public class Book {
     private UUID id;
-    private String name;
+    private String title;
 }
