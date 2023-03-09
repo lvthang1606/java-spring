@@ -48,9 +48,10 @@ class UserServiceTest {
     @Test
     void shouldCreateUser_OK() {
         final var user = buildUser();
+        when(userStore.createUser(user)).thenReturn(user);
+
         final var createdUser = userService.createUser(user);
 
-        when(userStore.createUser(user)).thenReturn(user);
         assertEquals(user, createdUser);
         verify(userStore).createUser(user);
     }
