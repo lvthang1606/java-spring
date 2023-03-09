@@ -1,8 +1,7 @@
 package com.thangle.domain.user;
 
-import com.thangle.error.ValidationException;
+import com.thangle.error.BadRequestException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -29,7 +28,7 @@ public class UserService {
     private void verifyUsernameAvailable(final String username) {
         final Optional<User> optionalUser = userStore.findUserByUsername(username);
         if (optionalUser.isPresent()) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "User is already exists");
+            throw new BadRequestException("User already exists");
         }
     }
 
@@ -41,6 +40,10 @@ public class UserService {
     public User updateUser(final UUID id, final User updatedUser) {
         final User user = findUserById(id);
 
+        verifyUsernameAvailable(updatedUser.getUsername());
+        if (updatedUser.getPassword() == null || updatedUser.getPassword().toString() == "") {
+            throw new BadRequestException("Password cannot be null");
+        }
         user.setUsername(updatedUser.getUsername());
         user.setPassword(updatedUser.getPassword());
         user.setFirstName(updatedUser.getFirstName());
@@ -53,7 +56,7 @@ public class UserService {
     }
 
     public void deleteUser(final UUID id) {
-        findUserById(id);
-        userStore.deleteUser(id);
+        final User user = findUserById(id);
+        userStore.deleteUser(user.getId());
     }
 }
