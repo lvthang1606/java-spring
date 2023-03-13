@@ -32,11 +32,11 @@ public class UserStoreTest {
     }
 
     @Test
-    void shouldCreateUser_OK() {
+    void shouldCreate_OK() {
         final var expected = buildUserEntity();
         when(userRepository.save(any())).thenReturn(expected);
 
-        final var actual = userStore.createUser(buildUser());
+        final var actual = userStore.create(buildUser());
 
         assertEquals(actual.getId(), expected.getId());
         assertEquals(actual.getUsername(), expected.getUsername());
@@ -48,11 +48,11 @@ public class UserStoreTest {
     }
 
     @Test
-    void shouldUpdateUser_OK() {
+    void shouldUpdate_OK() {
         final var expected = buildUserEntity();
         when(userRepository.save(any())).thenReturn(expected);
 
-        final var actual = userStore.updateUser(buildUser());
+        final var actual = userStore.update(buildUser());
         assertEquals(actual.getId(), expected.getId());
         assertEquals(actual.getUsername(), expected.getUsername());
         assertEquals(actual.getPassword(), expected.getPassword());
@@ -63,9 +63,9 @@ public class UserStoreTest {
     }
 
     @Test
-    void shouldDeleteUser_OK() {
+    void shouldDelete_OK() {
         final var user = buildUserEntity();
-        userStore.deleteUser(user.getId());
+        userStore.delete(user.getId());
 
     }
 }

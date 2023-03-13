@@ -60,7 +60,7 @@ public class UserControllerTest {
     void shouldFindById_OK() throws Exception {
         final var user = buildUser();
 
-        when(userService.findUserById(user.getId())).thenReturn(user);
+        when(userService.findById(user.getId())).thenReturn(user);
 
         mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/" + user.getId()))
                 .andExpect(status().isOk())
@@ -71,14 +71,14 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.avatar").value(user.getAvatar()))
                 .andExpect(jsonPath("$.roleId").value(user.getRoleId().toString()));
 
-        verify(userService).findUserById(user.getId());
+        verify(userService).findById(user.getId());
     }
 
     @Test
-    void shouldCreateUser_OK() throws Exception{
+    void shouldCreate_OK() throws Exception{
         final var user = buildUser();
 
-        when(userService.createUser(any(User.class))).thenReturn(user);
+        when(userService.create(any(User.class))).thenReturn(user);
 
         mvc.perform(MockMvcRequestBuilders.post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -94,12 +94,12 @@ public class UserControllerTest {
     }
 
     @Test
-    void shouldUpdateUser_OK() throws Exception {
+    void shouldUpdate_OK() throws Exception {
         final var userNeedsToBeUpdated = buildUser();
         final var updatedUser = buildUser();
         updatedUser.setId(userNeedsToBeUpdated.getId());
 
-        when(userService.updateUser(any(UUID.class), any(User.class))).thenReturn(updatedUser);
+        when(userService.update(any(), any())).thenReturn(updatedUser);
 
         mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/" + userNeedsToBeUpdated.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +113,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.avatar").value(updatedUser.getAvatar()))
                 .andExpect(jsonPath("$.roleId").value(updatedUser.getRoleId().toString()));
 
-        verify(userService).updateUser(any(UUID.class), any(User.class));
+        verify(userService).update(any(UUID.class), any(User.class));
     }
 
     @Test
@@ -123,6 +123,6 @@ public class UserControllerTest {
         this.mvc.perform(MockMvcRequestBuilders.delete(BASE_URL + "/" + user.getId()))
                 .andExpect(status().isOk());
 
-        verify(userService).deleteUser(user.getId());
+        verify(userService).delete(user.getId());
     }
 }

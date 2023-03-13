@@ -20,24 +20,24 @@ public class UserStore {
         return toUsers(toList(userRepository.findAll()));
     }
 
-    public Optional<User> findUserById(final UUID id) {
+    public Optional<User> findById(final UUID id) {
         return userRepository.findById(id).map(UserEntityMapper::toUser);
     }
 
-    public Optional<User> findUserByUsername(final String username) {
+    public Optional<User> findByUsername(final String username) {
         return userRepository.findByUsername(username)
                 .map(UserEntityMapper::toUser);
     }
 
-    public User createUser(final User user) {
+    public User create(final User user) {
         return toUser(userRepository.save(toUserEntity(user)));
     }
 
-    public User updateUser(final User updatedUser) {
+    public User update(final User updatedUser) {
         return toUser(userRepository.save(toUserEntity(updatedUser)));
     }
 
-    public void deleteUser(final UUID id) {
+    public void delete(final UUID id) {
         userRepository.deleteById(id);
     }
 }

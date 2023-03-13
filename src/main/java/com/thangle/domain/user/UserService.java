@@ -21,30 +21,32 @@ public class UserService {
         return userStore.findAll();
     }
 
-    public User findUserById(final UUID id) {
-        return userStore.findUserById(id).orElseThrow(supplyUserNotFound(id));
+    public User findById(final UUID id) {
+        return userStore.findById(id).orElseThrow(supplyUserNotFound(id));
     }
 
     private void verifyUsernameAvailable(final String username) {
-        final Optional<User> optionalUser = userStore.findUserByUsername(username);
+        final Optional<User> optionalUser = userStore.findByUsername(username);
         if (optionalUser.isPresent()) {
-            throw new BadRequestException("User already exists");
+            throw new BadRequestException("The username %s already exists", optionalUser.get().getUsername());
         }
     }
 
-    public User createUser(final User user) {
+    public User create(final User user) {
         verifyUsernameAvailable(user.getUsername());
-        return userStore.createUser(user);
+        return userStore.create(user);
     }
 
-    public User updateUser(final UUID id, final User updatedUser) {
-        final User user = findUserById(id);
+    public User update(final UUID id, final User updatedUser) {
+        final User user = findById(id);
 
-        verifyUsernameAvailable(updatedUser.getUsername());
-        if (updatedUser.getPassword() == null || updatedUser.getPassword().toString() == "") {
+        if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
+            verifyUsernameAvailable(updatedUser.getUsername());
+            user.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getPassword() == null || updatedUser.getPassword().isEmpty()) {
             throw new BadRequestException("Password cannot be null");
         }
-        user.setUsername(updatedUser.getUsername());
         user.setPassword(updatedUser.getPassword());
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
@@ -52,11 +54,11 @@ public class UserService {
         user.setAvatar(updatedUser.getAvatar());
         user.setUpdatedAt(Instant.now());
 
-        return userStore.updateUser(user);
+        return userStore.update(user);
     }
 
-    public void deleteUser(final UUID id) {
-        final User user = findUserById(id);
-        userStore.deleteUser(user.getId());
+    public void delete(final UUID id) {
+        final User user = findById(id);
+        userStore.delete(user.getId());
     }
 }
