@@ -25,25 +25,25 @@ public class UserController {
 
     @Operation(summary = "Find a specific user by id")
     @GetMapping("{id}")
-    public UserDTO findUserById(final @PathVariable UUID id) {
-        return toUserDTO(userService.findUserById(id));
+    public UserDTO findById(final @PathVariable UUID id) {
+        return toUserDTO(userService.findById(id));
     }
 
     @Operation(summary = "Create a specific user")
     @PostMapping
-    public UserDTO createUser(final @RequestBody User user) {
-        return toUserDTO(userService.createUser(user));
+    public UserDTO create(final @RequestBody User user) {
+        return toUserDTO(userService.create(user));
     }
 
     @Operation(summary = "Update a specific user")
     @PutMapping("{id}")
-    public UserDTO updateUser(final @PathVariable UUID id, final @RequestBody UserDTO userDTO) {
-        return toUserDTO(userService.updateUser(id, toUser(userDTO)));
+    public UserDTO update(final @PathVariable UUID id, final @RequestBody UserDTO userDTO) {
+        return toUserDTO(userService.update(id, toUser(userDTO)));
     }
 
     @Operation(summary = "Delete a specific user")
     @DeleteMapping("{id}")
-    public void deleteUser(final @PathVariable UUID id) {
-        userService.deleteUser(id);
+    public void delete(final @PathVariable UUID id) {
+        userService.delete(id);
     }
 }
