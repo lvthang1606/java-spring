@@ -38,7 +38,7 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(books.size()))
                 .andExpect(jsonPath("$[0].id").value(books.get(0).getId().toString()))
-                .andExpect(jsonPath("$[0].name").value(books.get(0).getTitle()));
+                .andExpect(jsonPath("$[0].title").value(books.get(0).getTitle()));
 
         verify(bookService).findAll();
     }
