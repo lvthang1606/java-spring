@@ -13,6 +13,25 @@ public class BookDTOMapper {
         return BookDTO.builder()
                 .id(book.getId())
                 .title(book.getTitle())
+                .author(book.getAuthor())
+                .description(book.getDescription())
+                .createdAt(book.getCreatedAt())
+                .updatedAt(book.getUpdatedAt())
+                .image(book.getImage())
+                .userId(book.getUserId())
+                .build();
+    }
+
+    public static Book toBook(final BookDTO bookDTO) {
+        return Book.builder()
+                .id(bookDTO.getId())
+                .title(bookDTO.getTitle())
+                .author(bookDTO.getAuthor())
+                .description(bookDTO.getDescription())
+                .createdAt(bookDTO.getCreatedAt())
+                .updatedAt(bookDTO.getUpdatedAt())
+                .image(bookDTO.getImage())
+                .userId(bookDTO.getUserId())
                 .build();
     }
 
