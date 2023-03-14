@@ -3,6 +3,7 @@ package com.thangle.fakes;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -17,6 +18,12 @@ public class BookFakes {
         return Book.builder()
                 .id(UUID.randomUUID())
                 .title(RandomStringUtils.randomAlphabetic(3, 10))
+                .author(RandomStringUtils.randomAlphabetic(3, 10))
+                .description(RandomStringUtils.randomAlphabetic(3, 10))
+                .createdAt(Instant.EPOCH)
+                .updatedAt(Instant.EPOCH)
+                .image(RandomStringUtils.randomAlphabetic(3, 10))
+                .userId(UUID.randomUUID())
                 .build();
     }
 
@@ -30,6 +37,12 @@ public class BookFakes {
         return BookEntity.builder()
                 .id(UUID.randomUUID())
                 .title(RandomStringUtils.randomAlphabetic(3, 10))
+                .author(RandomStringUtils.randomAlphabetic(3, 10))
+                .description(RandomStringUtils.randomAlphabetic(3, 10))
+                .createdAt(Instant.EPOCH)
+                .updatedAt(Instant.EPOCH)
+                .image(RandomStringUtils.randomAlphabetic(3, 10))
+                .userId(UUID.randomUUID())
                 .build();
     }
 

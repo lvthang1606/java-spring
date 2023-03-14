@@ -16,13 +16,19 @@ public class BookDTOMapperTest {
 
         assertEquals(book.getId(), bookDTO.getId());
         assertEquals(book.getTitle(), bookDTO.getTitle());
+        assertEquals(book.getAuthor(), bookDTO.getAuthor());
+        assertEquals(book.getDescription(), bookDTO.getDescription());
+        assertEquals(book.getCreatedAt(), bookDTO.getCreatedAt());
+        assertEquals(book.getUpdatedAt(), bookDTO.getUpdatedAt());
+        assertEquals(book.getImage(), bookDTO.getImage());
+        assertEquals(book.getUserId(), bookDTO.getUserId());
     }
 
     @Test
     void shouldToBookDTOs_OK() {
         final var books = buildBooks();
-
         final var bookDTOs = toBookDTOs(books);
+        
         assertEquals(books.size(), bookDTOs.size());
     }
 }
