@@ -10,6 +10,8 @@ import static com.thangle.fakes.BookFakes.buildBooks;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,12 +52,28 @@ class BookServiceTest {
     }
 
     @Test
+    void shouldFindByTitleAuthorDescription_OK() throws Exception {
+        final var book = buildBook();
+        final var expected = buildBooks();
+
+        when(bookService.find(anyString())).thenReturn(expected);
+
+        final var actual = bookService.find(book.getTitle());
+
+        assertEquals(expected.size(), actual.size());
+
+        verify(bookStore).find(book.getTitle());
+    }
+
+    @Test
     void shouldCreate_OK() {
         final var book = buildBook();
         when(bookStore.create(book)).thenReturn(book);
 
         final var updatedBook = bookService.create(book);
+
         assertEquals(book, updatedBook);
+
         verify(bookStore).create(book);
     }
 
@@ -83,10 +101,10 @@ class BookServiceTest {
     @Test
     void shouldDeleteById_OK() {
         final var book = buildBook();
-
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
 
         bookService.deleteById(book.getId());
+
         verify(bookStore).deleteById(book.getId());
     }
 }

@@ -24,12 +24,9 @@ public class BookDTOMapper {
 
     public static Book toBook(final BookDTO bookDTO) {
         return Book.builder()
-                .id(bookDTO.getId())
                 .title(bookDTO.getTitle())
                 .author(bookDTO.getAuthor())
                 .description(bookDTO.getDescription())
-                .createdAt(bookDTO.getCreatedAt())
-                .updatedAt(bookDTO.getUpdatedAt())
                 .image(bookDTO.getImage())
                 .userId(bookDTO.getUserId())
                 .build();
