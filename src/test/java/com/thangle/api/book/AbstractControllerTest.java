@@ -1,6 +1,5 @@
 package com.thangle.api.book;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,13 @@ public abstract class AbstractControllerTest {
         return mockMvc.perform(MockMvcRequestBuilders.get(path).contentType(MediaType.APPLICATION_JSON));
     }
 
-    public ResultActions post(final String path, final BookDTO bookDTO) throws Exception {
-        final String requestBody = mapper.writeValueAsString(bookDTO);
+    public ResultActions post(final String path, final BookResponseDTO bookResponseDTO) throws Exception {
+        final String requestBody = mapper.writeValueAsString(bookResponseDTO);
         return mockMvc.perform(MockMvcRequestBuilders.post(path).contentType(MediaType.APPLICATION_JSON).content(requestBody));
     }
 
-    public ResultActions put(final String path, final BookUpdateDTO bookUpdateDTO) throws Exception {
-        final String requestBody = mapper.writeValueAsString(bookUpdateDTO);
+    public ResultActions put(final String path, final BookChangeDTO bookChangeDTO) throws Exception {
+        final String requestBody = mapper.writeValueAsString(bookChangeDTO);
         return mockMvc.perform(MockMvcRequestBuilders.put(path).contentType(MediaType.APPLICATION_JSON).content(requestBody));
     }
 

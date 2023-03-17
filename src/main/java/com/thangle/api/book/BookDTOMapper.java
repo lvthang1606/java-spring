@@ -9,8 +9,8 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 @UtilityClass
 public class BookDTOMapper {
-    public static BookDTO toBookDTO(final Book book) {
-        return BookDTO.builder()
+    public static BookResponseDTO toBookDTO(final Book book) {
+        return BookResponseDTO.builder()
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
@@ -22,17 +22,17 @@ public class BookDTOMapper {
                 .build();
     }
 
-    public static Book toBook(final BookDTO bookDTO) {
+    public static Book toBook(final BookResponseDTO bookResponseDTO) {
         return Book.builder()
-                .title(bookDTO.getTitle())
-                .author(bookDTO.getAuthor())
-                .description(bookDTO.getDescription())
-                .image(bookDTO.getImage())
-                .userId(bookDTO.getUserId())
+                .title(bookResponseDTO.getTitle())
+                .author(bookResponseDTO.getAuthor())
+                .description(bookResponseDTO.getDescription())
+                .image(bookResponseDTO.getImage())
+                .userId(bookResponseDTO.getUserId())
                 .build();
     }
 
-    public static List<BookDTO> toBookDTOs(final List<Book> books) {
+    public static List<BookResponseDTO> toBookDTOs(final List<Book> books) {
         return emptyIfNull(books)
                 .stream()
                 .map(BookDTOMapper::toBookDTO)

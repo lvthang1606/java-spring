@@ -20,7 +20,7 @@ import com.thangle.domain.book.BookService;
 import static com.thangle.fakes.BookFakes.buildBooks;
 import static com.thangle.fakes.BookFakes.buildBook;
 import static com.thangle.api.book.BookDTOMapper.toBookDTO;
-import static com.thangle.api.book.BookUpdateDTOMapper.toBookUpdateDTO;
+import static com.thangle.api.book.BookChangeDTOMapper.toBookUpdateDTO;
 
 @WebMvcTest(BookController.class)
 @AutoConfigureMockMvc

@@ -8,7 +8,7 @@ import static com.thangle.api.book.BookDTOMapper.toBookDTOs;
 import static com.thangle.fakes.BookFakes.buildBook;
 import static com.thangle.fakes.BookFakes.buildBooks;
 
-public class BookDTOMapperTest {
+public class BookResponseDTOMapperTest {
     @Test
     void shouldToBookDTO_OK() {
         final var book = buildBook();

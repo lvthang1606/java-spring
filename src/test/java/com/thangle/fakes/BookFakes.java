@@ -20,8 +20,8 @@ public class BookFakes {
                 .title(RandomStringUtils.randomAlphabetic(3, 10))
                 .author(RandomStringUtils.randomAlphabetic(3, 10))
                 .description(RandomStringUtils.randomAlphabetic(3, 10))
-                .createdAt(Instant.EPOCH)
-                .updatedAt(Instant.EPOCH)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .image(RandomStringUtils.randomAlphabetic(3, 10))
                 .userId(UUID.randomUUID())
                 .build();
@@ -39,8 +39,8 @@ public class BookFakes {
                 .title(RandomStringUtils.randomAlphabetic(3, 10))
                 .author(RandomStringUtils.randomAlphabetic(3, 10))
                 .description(RandomStringUtils.randomAlphabetic(3, 10))
-                .createdAt(Instant.EPOCH)
-                .updatedAt(Instant.EPOCH)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .image(RandomStringUtils.randomAlphabetic(3, 10))
                 .userId(UUID.randomUUID())
                 .build();
