@@ -3,12 +3,14 @@ package com.thangle.api.user;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.thangle.common.ResponseDTO;
+import com.thangle.common.UpdateDTO;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class UserDTO {
+public class UserDTO implements ResponseDTO, UpdateDTO {
     private UUID id;
     private String username;
     private String password;

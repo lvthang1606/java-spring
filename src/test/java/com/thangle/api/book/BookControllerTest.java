@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.thangle.fakes.BookFakes.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,10 +18,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.thangle.domain.book.BookService;
-import static com.thangle.fakes.BookFakes.buildBooks;
-import static com.thangle.fakes.BookFakes.buildBook;
-import static com.thangle.api.book.BookDTOMapper.toBookDTO;
-import static com.thangle.api.book.BookChangeDTOMapper.toBookUpdateDTO;
+
+import java.util.Collections;
+
+import static com.thangle.api.book.BookResponseDTOMapper.toBookResponseDTO;
+import static com.thangle.api.book.BookUpdateDTOMapper.toBookUpdateDTO;
 
 @WebMvcTest(BookController.class)
 @AutoConfigureMockMvc
@@ -78,9 +80,8 @@ class BookControllerTest extends AbstractControllerTest {
     @Test
     void shouldFindByTitleAuthorDescription_OK() throws Exception {
         final var book = buildBook();
-        final var expected = buildBooks();
 
-        when(bookService.find(book.getTitle())).thenReturn(expected);
+        when(bookService.find(book.getTitle())).thenReturn(Collections.singletonList(book));
 
         final var actual = bookService.find(book.getTitle());
 
@@ -106,7 +107,7 @@ class BookControllerTest extends AbstractControllerTest {
         final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         final String requestBody = mapper.writeValueAsString(book);
 
-        post(BASE_URL, toBookDTO(book))
+        post(BASE_URL, toBookResponseDTO(book))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(book.getId().toString()))
                 .andExpect(jsonPath("$.title").value(book.getTitle()))
@@ -121,7 +122,7 @@ class BookControllerTest extends AbstractControllerTest {
     @Test
     void shouldUpdate_OK() throws Exception {
         final var bookNeedsToBeUpdated = buildBook();
-        final var updatedBook = buildBook();
+        final var updatedBook = buildUpdatedBook(bookNeedsToBeUpdated.getId());
 
         updatedBook.setId(bookNeedsToBeUpdated.getId());
 

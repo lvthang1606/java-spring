@@ -16,7 +16,7 @@ public class BookFakes {
 
     public static Book buildBook() {
         return Book.builder()
-                .id(UUID.randomUUID())
+                .id(UUID.fromString("56bb3be9-c0f2-45a1-b695-6bd9266d8d78"))
                 .title(RandomStringUtils.randomAlphabetic(3, 10))
                 .author(RandomStringUtils.randomAlphabetic(3, 10))
                 .description(RandomStringUtils.randomAlphabetic(3, 10))
@@ -50,5 +50,19 @@ public class BookFakes {
         return IntStream.range(1, 5)
                 .mapToObj(_ignored -> buildBookEntity())
                 .toList();
+    }
+
+
+    public static Book buildUpdatedBook(UUID id) {
+        return Book.builder()
+                .id(id)
+                .title(RandomStringUtils.randomAlphabetic(3, 10))
+                .author(RandomStringUtils.randomAlphabetic(3, 10))
+                .description(RandomStringUtils.randomAlphabetic(3, 10))
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .image(RandomStringUtils.randomAlphabetic(3, 10))
+                .userId(UUID.randomUUID())
+                .build();
     }
 }
