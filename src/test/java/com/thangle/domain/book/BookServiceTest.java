@@ -1,24 +1,24 @@
 package com.thangle.domain.book;
 
+import com.thangle.error.BadRequestException;
+import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.thangle.fakes.BookFakes.buildBook;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static com.thangle.fakes.BookFakes.buildBooks;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.thangle.persistence.book.BookStore;
 
-import java.util.Optional;
-
+import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -31,7 +31,6 @@ class BookServiceTest {
 
     @Test
     void shouldFindAll_OK() {
-
         final var expected = buildBooks();
 
         when(bookStore.findAll()).thenReturn(expected);
@@ -56,7 +55,7 @@ class BookServiceTest {
         final var book = buildBook();
         final var expected = buildBooks();
 
-        when(bookService.find(anyString())).thenReturn(expected);
+        when(bookService.find(book.getTitle())).thenReturn(expected);
 
         final var actual = bookService.find(book.getTitle());
 
@@ -78,6 +77,20 @@ class BookServiceTest {
     }
 
     @Test
+    void shouldCreate_ThrowsBadRequestException() {
+        final var book = buildBook();
+        final var books = Collections.singletonList(book);
+        when(bookStore.findByTitleAndAuthor(book.getTitle(), book.getAuthor()))
+                .thenReturn(books);
+
+        final var exception = assertThrows(BadRequestException.class, () -> {
+            bookService.create(book);
+        });
+
+        assertThrows(BadRequestException.class, () -> bookService.create(book));
+    }
+
+    @Test
     void shouldUpdate_OK() {
         final var book = buildBook();
         final var updatedBook = buildBook();
@@ -96,6 +109,31 @@ class BookServiceTest {
         assertEquals(expected.getUpdatedAt(), updatedBook.getUpdatedAt());
         assertEquals(expected.getImage(), updatedBook.getImage());
         assertEquals(expected.getUserId(), updatedBook.getUserId());
+    }
+
+    @Test
+    void shouldUpdate_ThrowsNotFoundException() {
+        final var bookToUpdate = buildBook();
+        when(bookStore.findById(bookToUpdate.getId())).thenThrow(NotFoundException.class);
+
+        final var exception = assertThrows(NotFoundException.class, () -> {
+            bookService.update(bookToUpdate.getId(), bookToUpdate);
+        });
+
+        assertThrows(NotFoundException.class, () -> bookService.update(bookToUpdate.getId(), bookToUpdate));
+    }
+
+    @Test
+    void shouldUpdate_ThrowsBadRequestException() {
+        final var book = buildBook();
+        final var updatedBook = buildBook();
+        final var books = Collections.singletonList(book);
+
+        when(bookStore.findById(updatedBook.getId())).thenReturn(Optional.of(updatedBook));
+        when(bookStore.findByTitleAndAuthor(updatedBook.getTitle(), updatedBook.getAuthor()))
+                .thenReturn(books);
+
+        assertThrows(BadRequestException.class, () -> bookService.update(updatedBook.getId(), updatedBook));
     }
 
     @Test

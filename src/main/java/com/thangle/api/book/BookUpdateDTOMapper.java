@@ -15,4 +15,15 @@ public class BookUpdateDTOMapper {
                 .userId(bookUpdateDTO.getUserId())
                 .build();
     }
+
+    public static BookUpdateDTO toBookUpdateDTO(final Book book) {
+        return BookUpdateDTO.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .description(book.getDescription())
+                .image(book.getImage())
+                .userId(book.getUserId())
+                .build();
+    }
 }
