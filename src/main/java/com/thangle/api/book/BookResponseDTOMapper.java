@@ -9,6 +9,7 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 @UtilityClass
 public class BookResponseDTOMapper {
+
     public static BookResponseDTO toBookResponseDTO(final Book book) {
         return BookResponseDTO.builder()
                 .id(book.getId())
@@ -19,16 +20,6 @@ public class BookResponseDTOMapper {
                 .updatedAt(book.getUpdatedAt())
                 .image(book.getImage())
                 .userId(book.getUserId())
-                .build();
-    }
-
-    public static Book toBook(final BookResponseDTO bookResponseDTO) {
-        return Book.builder()
-                .title(bookResponseDTO.getTitle())
-                .author(bookResponseDTO.getAuthor())
-                .description(bookResponseDTO.getDescription())
-                .image(bookResponseDTO.getImage())
-                .userId(bookResponseDTO.getUserId())
                 .build();
     }
 

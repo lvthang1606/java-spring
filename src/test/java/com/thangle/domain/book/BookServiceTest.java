@@ -1,7 +1,5 @@
 package com.thangle.domain.book;
 
-import com.thangle.error.BadRequestException;
-import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -77,7 +75,7 @@ class BookServiceTest {
     @Test
     void shouldUpdate_OK() {
         final var book = buildBook();
-        final var updatedBook = buildBook();
+        final var updatedBook = buildUpdatedBook(book.getId());
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
         when(bookStore.update(book)).thenReturn(updatedBook);

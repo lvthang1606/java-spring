@@ -16,7 +16,7 @@ public class BookFakes {
 
     public static Book buildBook() {
         return Book.builder()
-                .id(UUID.fromString("56bb3be9-c0f2-45a1-b695-6bd9266d8d78"))
+                .id(UUID.randomUUID())
                 .title(RandomStringUtils.randomAlphabetic(3, 10))
                 .author(RandomStringUtils.randomAlphabetic(3, 10))
                 .description(RandomStringUtils.randomAlphabetic(3, 10))
