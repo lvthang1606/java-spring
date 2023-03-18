@@ -1,6 +1,5 @@
 package com.thangle.api.book;
 
-import com.thangle.common.ResponseDTO;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class BookResponseDTO implements ResponseDTO {
+public class BookResponseDTO {
     private UUID id;
     private String title;
     private String author;

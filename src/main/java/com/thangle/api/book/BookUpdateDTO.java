@@ -1,6 +1,5 @@
 package com.thangle.api.book;
 
-import com.thangle.common.UpdateDTO;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +7,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class BookUpdateDTO implements UpdateDTO {
+public class BookUpdateDTO {
     private String title;
     private String author;
     private String description;

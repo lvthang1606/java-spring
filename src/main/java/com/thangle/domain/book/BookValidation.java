@@ -27,8 +27,8 @@ public class BookValidation {
         }
     }
 
-    private void validateUserId(final UUID id) {
-        if (id == null) {
+    private void validateUserId(final UUID userId) {
+        if (userId == null) {
             throw new BadRequestException("User cannot be empty");
         }
     }
