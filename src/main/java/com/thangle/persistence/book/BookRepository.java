@@ -12,7 +12,4 @@ public interface BookRepository extends CrudRepository<BookEntity, UUID> {
             "OR LOWER(author) LIKE LOWER(CONCAT('%', :searchTerm, '%'))" +
             "OR LOWER(description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     List<BookEntity> find(final String searchTerm);
-
-    @Query("SELECT * FROM books b WHERE b.title = :title AND b.author = :author")
-    List<BookEntity> findByTitleAndAuthor(final String title, final String author);
 }

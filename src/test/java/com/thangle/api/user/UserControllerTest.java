@@ -1,6 +1,6 @@
 package com.thangle.api.user;
 
-import com.thangle.api.book.AbstractControllerTest;
+import com.thangle.api.AbstractControllerTest;
 import com.thangle.domain.user.UserService;
 import com.thangle.domain.user.User;
 

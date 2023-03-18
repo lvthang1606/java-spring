@@ -29,10 +29,6 @@ public class BookStore {
         return toBooks(bookRepository.find(searchTerm));
     }
 
-    public List<Book> findByTitleAndAuthor(final String title, final String author) {
-        return toBooks(bookRepository.findByTitleAndAuthor(title, author));
-    }
-
     public Book create(final Book book) {
         return toBook(bookRepository.save(toBookEntity(book)));
     }

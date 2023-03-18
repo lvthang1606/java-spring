@@ -1,7 +1,6 @@
 package com.thangle.api.book;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.thangle.api.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,7 +21,6 @@ import com.thangle.domain.book.BookService;
 import java.util.Collections;
 
 import static com.thangle.api.book.BookResponseDTOMapper.toBookResponseDTO;
-import static com.thangle.api.book.BookUpdateDTOMapper.toBookUpdateDTO;
 
 @WebMvcTest(BookController.class)
 @AutoConfigureMockMvc
@@ -104,9 +102,6 @@ class BookControllerTest extends AbstractControllerTest {
 
         when(bookService.create(any())).thenReturn(book);
 
-        final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        final String requestBody = mapper.writeValueAsString(book);
-
         post(BASE_URL, toBookResponseDTO(book))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(book.getId().toString()))
@@ -128,10 +123,7 @@ class BookControllerTest extends AbstractControllerTest {
 
         when(bookService.update(any(), any())).thenReturn(updatedBook);
 
-        final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        final String requestBody = mapper.writeValueAsString(updatedBook);
-
-        put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), toBookUpdateDTO(updatedBook))
+        put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), updatedBook)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(updatedBook.getId().toString()))
                 .andExpect(jsonPath("$.title").value(updatedBook.getTitle()))
