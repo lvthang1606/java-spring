@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 import static com.thangle.fakes.UserFakes.buildUsers;
 import static com.thangle.fakes.UserFakes.buildUser;
-import static com.thangle.api.user.UserDTOMapper.toUserDTO;
+import static com.thangle.api.user.UserResponseDTOMapper.toUserResponseDTO;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc
@@ -77,7 +77,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
         when(userService.create(any(User.class))).thenReturn(user);
 
-        post(BASE_URL, toUserDTO(user))
+        post(BASE_URL, toUserResponseDTO(user))
                 .andExpect(jsonPath("$.id").value(user.getId().toString()))
                 .andExpect(jsonPath("$.username").value(user.getUsername()))
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
@@ -96,7 +96,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
         when(userService.update(any(), any())).thenReturn(updatedUser);
 
-        put(BASE_URL + "/" + userNeedsToBeUpdated.getId(), toUserDTO(updatedUser))
+        put(BASE_URL + "/" + userNeedsToBeUpdated.getId(), toUserResponseDTO(updatedUser))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(updatedUser.getId().toString()))
                 .andExpect(jsonPath("$.username").value(updatedUser.getUsername()))

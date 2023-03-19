@@ -36,6 +36,7 @@ public class UserService {
 
     public User create(final User user) {
         verifyUsernameAvailable(user.getUsername());
+        user.setCreatedAt(Instant.now());
         return userStore.create(user);
     }
 
