@@ -6,8 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.thangle.fakes.BookFakes.buildBookEntities;
+import static com.thangle.fakes.BookFakes.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +25,52 @@ class BookStoreTest {
     void shouldFindAll_OK() {
         final var expected = buildBookEntities();
         when(bookRepository.findAll()).thenReturn(expected);
+
         assertEquals(expected.size(), bookStore.findAll().size());
+
         verify(bookRepository).findAll();
+    }
+
+    @Test
+    void shouldCreate_OK() {
+        final var expected = buildBookEntity();
+        when(bookRepository.save(any())).thenReturn(expected);
+
+        final var actual = bookStore.save(buildBook());
+
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getAuthor(), actual.getAuthor());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getCreatedAt(), actual.getCreatedAt());
+        assertEquals(expected.getUpdatedAt(), actual.getUpdatedAt());
+        assertEquals(expected.getImage(), actual.getImage());
+        assertEquals(expected.getUserId(), actual.getUserId());
+    }
+
+    @Test
+    void shouldUpdate_OK() {
+        final var expected = buildBookEntity();
+        when(bookRepository.save(any())).thenReturn(expected);
+
+        final var actual = bookStore.save(buildBook());
+
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getAuthor(), actual.getAuthor());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getCreatedAt(), actual.getCreatedAt());
+        assertEquals(expected.getUpdatedAt(), actual.getUpdatedAt());
+        assertEquals(expected.getImage(), actual.getImage());
+        assertEquals(expected.getUserId(), actual.getUserId());
+    }
+
+    @Test
+    void shouldDeleteById_OK() {
+        final var book = buildBookEntity();
+
+        bookStore.deleteById(book.getId());
+
+        verify(bookRepository).deleteById(book.getId());
     }
 }

@@ -7,7 +7,11 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class BookDTO {
-    private UUID id;
+public class BookRequestDTO {
+
     private String title;
+    private String author;
+    private String description;
+    private String image;
+    private UUID userId;
 }

@@ -1,7 +1,6 @@
 package com.thangle.api.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.thangle.api.AbstractControllerTest;
 import com.thangle.domain.user.UserService;
 import com.thangle.domain.user.User;
 
@@ -11,8 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -28,7 +25,7 @@ import static com.thangle.api.user.UserDTOMapper.toUserDTO;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class UserControllerTest extends AbstractControllerTest {
     private static final String BASE_URL = "/api/v1/users";
 
     @Autowired
@@ -43,7 +40,7 @@ public class UserControllerTest {
 
         when(userService.findAll()).thenReturn(users);
 
-        mvc.perform(MockMvcRequestBuilders.get(BASE_URL))
+        get(BASE_URL)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(users.size()))
                 .andExpect(jsonPath("$[0].id").value(users.get(0).getId().toString()))
@@ -62,7 +59,7 @@ public class UserControllerTest {
 
         when(userService.findById(user.getId())).thenReturn(user);
 
-        mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/" + user.getId()))
+        get(BASE_URL + "/" + user.getId())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(user.getId().toString()))
                 .andExpect(jsonPath("$.username").value(user.getUsername()))
@@ -80,9 +77,7 @@ public class UserControllerTest {
 
         when(userService.create(any(User.class))).thenReturn(user);
 
-        mvc.perform(MockMvcRequestBuilders.post(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(user)))
+        post(BASE_URL, toUserDTO(user))
                 .andExpect(jsonPath("$.id").value(user.getId().toString()))
                 .andExpect(jsonPath("$.username").value(user.getUsername()))
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
@@ -101,9 +96,7 @@ public class UserControllerTest {
 
         when(userService.update(any(), any())).thenReturn(updatedUser);
 
-        mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/" + userNeedsToBeUpdated.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(toUserDTO(updatedUser))))
+        put(BASE_URL + "/" + userNeedsToBeUpdated.getId(), toUserDTO(updatedUser))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(updatedUser.getId().toString()))
                 .andExpect(jsonPath("$.username").value(updatedUser.getUsername()))
@@ -120,7 +113,7 @@ public class UserControllerTest {
     void shouldDeleteById_OK() throws Exception {
         final var user = buildUser();
 
-        this.mvc.perform(MockMvcRequestBuilders.delete(BASE_URL + "/" + user.getId()))
+        delete(BASE_URL + "/" + user.getId())
                 .andExpect(status().isOk());
 
         verify(userService).delete(user.getId());

@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.annotation.Id;
 
-import javax.persistence.Id;
+import java.time.Instant;
 import java.util.UUID;
 
 @Table(value = "books")
@@ -16,9 +17,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookEntity {
-    public static final String ID_FIELD = "id";
 
     @Id
     private UUID id;
     private String title;
+    private String author;
+    private String description;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private String image;
+    private UUID userId;
 }

@@ -1,18 +1,14 @@
-package com.thangle.domain.book;
+package com.thangle.api.book;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.With;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
-@Setter
 @Builder
-@With
-public class Book {
+public class BookResponseDTO {
 
     private UUID id;
     private String title;
