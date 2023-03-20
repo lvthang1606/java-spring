@@ -1,7 +1,6 @@
 package com.thangle.api.book;
 
 import com.thangle.api.AbstractControllerTest;
-import com.thangle.domain.book.Book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,8 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thangle.fakes.BookFakes.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,9 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.thangle.domain.book.BookService;
 
-import java.util.Collections;
+import java.util.List;
 
-import static com.thangle.api.book.BookResponseDTOMapper.toBookResponseDTO;
+import static com.thangle.api.book.BookRequestDTOMapper.toBookRequestDTO;
 
 @WebMvcTest(BookController.class)
 @AutoConfigureMockMvc
@@ -81,7 +79,7 @@ class BookControllerTest extends AbstractControllerTest {
     void shouldFindByTitleAuthorDescription_OK() throws Exception {
         final var book = buildBook();
 
-        when(bookService.find(book.getTitle())).thenReturn(Collections.singletonList(book));
+        when(bookService.find(book.getTitle())).thenReturn(List.of(book));
 
         get(BASE_URL + "/search?searchTerm=" + book.getTitle())
                 .andExpect(status().isOk())
@@ -98,10 +96,12 @@ class BookControllerTest extends AbstractControllerTest {
     @Test
     void shouldCreate_OK() throws Exception {
         final var book = buildBook();
+        final var bookRequestDTO = toBookRequestDTO(book);
 
-        when(bookService.create(any())).thenReturn(book);
+        when(bookService.create(argThat(x -> x.getTitle().equals(bookRequestDTO.getTitle()))))
+                .thenReturn(book);
 
-        post(BASE_URL, toBookResponseDTO(book))
+        post(BASE_URL, bookRequestDTO)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(book.getId().toString()))
                 .andExpect(jsonPath("$.title").value(book.getTitle()))
@@ -116,13 +116,13 @@ class BookControllerTest extends AbstractControllerTest {
     @Test
     void shouldUpdate_OK() throws Exception {
         final var bookNeedsToBeUpdated = buildBook();
-        final var updatedBook = buildUpdatedBook(bookNeedsToBeUpdated.getId());
+        final var updatedBook = buildBook().withId(bookNeedsToBeUpdated.getId());
+        final var bookRequestDTO = toBookRequestDTO(updatedBook);
 
-        updatedBook.setId(bookNeedsToBeUpdated.getId());
+        when(bookService.update(eq(bookNeedsToBeUpdated.getId()), argThat(x -> x.getTitle().equals(bookRequestDTO.getTitle()))))
+                .thenReturn(updatedBook);
 
-        when(bookService.update(eq(bookNeedsToBeUpdated.getId()), any(Book.class))).thenReturn(updatedBook);
-
-        put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), updatedBook)
+        put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), bookRequestDTO)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(updatedBook.getId().toString()))
                 .andExpect(jsonPath("$.title").value(updatedBook.getTitle()))

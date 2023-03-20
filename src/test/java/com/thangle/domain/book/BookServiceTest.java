@@ -76,24 +76,21 @@ class BookServiceTest {
 
     @Test
     void shouldCreate_WithTitleEmpty() {
-        final var book = buildBook();
-        book.setTitle("");
+        final var book = buildBook().withTitle("");
 
         assertThrows(BadRequestException.class, () -> bookService.create(book));
     }
 
     @Test
     void shouldCreate_WithAuthorEmpty() {
-        final var book = buildBook();
-        book.setAuthor("");
+        final var book = buildBook().withAuthor("");
 
         assertThrows(BadRequestException.class, () -> bookService.create(book));
     }
 
     @Test
     void shouldCreate_WithUserIdNull() {
-        final var book = buildBook();
-        book.setUserId(null);
+        final var book = buildBook().withUserId(null);
 
         assertThrows(BadRequestException.class, () -> bookService.create(book));
     }
@@ -101,7 +98,7 @@ class BookServiceTest {
     @Test
     void shouldUpdate_OK() {
         final var book = buildBook();
-        final var updatedBook = buildUpdatedBook(book.getId());
+        final var updatedBook = buildBook().withId(book.getId());
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
         when(bookStore.save(book)).thenReturn(updatedBook);
@@ -120,7 +117,7 @@ class BookServiceTest {
     @Test
     void shouldUpdate_ThrowsNotFound() {
         final var book = buildBook();
-        final var updatedBook = buildUpdatedBook(book.getId());
+        final var updatedBook = buildBook().withId(book.getId());
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.empty());
 
@@ -130,10 +127,11 @@ class BookServiceTest {
     @Test
     void shouldUpdate_WithTitleEmpty() {
         final var book = buildBook();
-        final var updatedBook = buildUpdatedBook(book.getId());
+        final var updatedBook = buildBook()
+                                .withId(book.getId())
+                                .withTitle("");
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
-        updatedBook.setTitle("");
 
         assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
     }
@@ -141,10 +139,11 @@ class BookServiceTest {
     @Test
     void shouldUpdate_WithAuthorEmpty() {
         final var book = buildBook();
-        final var updatedBook = buildUpdatedBook(book.getId());
+        final var updatedBook = buildBook()
+                                .withId(book.getId())
+                                .withAuthor("");
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
-        updatedBook.setAuthor("");
 
         assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
     }
@@ -152,10 +151,11 @@ class BookServiceTest {
     @Test
     void shouldUpdate_WithUserIdNull() {
         final var book = buildBook();
-        final var updatedBook = buildUpdatedBook(book.getId());
+        final var updatedBook = buildBook()
+                                .withId(book.getId())
+                                .withUserId(null);
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
-        updatedBook.setUserId(null);
 
         assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
     }
