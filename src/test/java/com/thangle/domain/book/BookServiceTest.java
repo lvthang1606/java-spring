@@ -80,15 +80,15 @@ class BookServiceTest {
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
         when(bookStore.update(book)).thenReturn(updatedBook);
 
-        final var expected = bookService.update(book.getId(), updatedBook);
-        assertEquals(expected.getId(), updatedBook.getId());
-        assertEquals(expected.getTitle(), updatedBook.getTitle());
-        assertEquals(expected.getAuthor(), updatedBook.getAuthor());
-        assertEquals(expected.getDescription(), updatedBook.getDescription());
-        assertEquals(expected.getCreatedAt(), updatedBook.getCreatedAt());
-        assertEquals(expected.getUpdatedAt(), updatedBook.getUpdatedAt());
-        assertEquals(expected.getImage(), updatedBook.getImage());
-        assertEquals(expected.getUserId(), updatedBook.getUserId());
+        final var actual = bookService.update(book.getId(), updatedBook);
+        assertEquals(updatedBook.getId(), actual.getId());
+        assertEquals(updatedBook.getTitle(), actual.getTitle());
+        assertEquals(updatedBook.getAuthor(), actual.getAuthor());
+        assertEquals(updatedBook.getDescription(), actual.getDescription());
+        assertEquals(updatedBook.getCreatedAt(), actual.getCreatedAt());
+        assertEquals(updatedBook.getUpdatedAt(), actual.getUpdatedAt());
+        assertEquals(updatedBook.getImage(), actual.getImage());
+        assertEquals(updatedBook.getUserId(), actual.getUserId());
     }
 
     @Test

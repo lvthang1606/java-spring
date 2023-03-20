@@ -9,6 +9,7 @@ import static com.thangle.fakes.BookFakes.buildBook;
 import static com.thangle.fakes.BookFakes.buildBooks;
 
 public class BookResponseDTOMapperTest {
+
     @Test
     void shouldToBookDTO_OK() {
         final var book = buildBook();

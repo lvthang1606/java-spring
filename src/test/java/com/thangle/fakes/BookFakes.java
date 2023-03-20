@@ -52,7 +52,6 @@ public class BookFakes {
                 .toList();
     }
 
-
     public static Book buildUpdatedBook(UUID id) {
         return Book.builder()
                 .id(id)

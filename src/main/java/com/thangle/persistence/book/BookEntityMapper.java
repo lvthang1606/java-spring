@@ -9,6 +9,7 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 @UtilityClass
 public class BookEntityMapper {
+
     public static Book toBook(final BookEntity bookEntity) {
         return Book.builder()
                 .id(bookEntity.getId())

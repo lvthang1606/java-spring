@@ -17,6 +17,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserStore userStore;
 
     public List<User> findAll() {

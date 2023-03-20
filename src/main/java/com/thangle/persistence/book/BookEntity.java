@@ -17,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookEntity {
+
     @Id
     private UUID id;
     private String title;

@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 @UtilityClass
 public class UserError {
+
     public static Supplier<NotFoundException> supplyUserNotFound(final UUID id) {
         return () -> new NotFoundException("User with id %s could not be found", id);
     }

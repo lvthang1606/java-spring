@@ -54,6 +54,7 @@ class BookStoreTest {
         when(bookRepository.save(any())).thenReturn(expected);
 
         final var actual = bookStore.update(buildBook());
+
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getTitle(), actual.getTitle());
         assertEquals(expected.getAuthor(), actual.getAuthor());

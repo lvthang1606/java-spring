@@ -1,6 +1,7 @@
 package com.thangle.api.book;
 
 import com.thangle.api.AbstractControllerTest;
+import com.thangle.domain.book.Book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thangle.fakes.BookFakes.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -81,19 +83,16 @@ class BookControllerTest extends AbstractControllerTest {
 
         when(bookService.find(book.getTitle())).thenReturn(Collections.singletonList(book));
 
-        final var actual = bookService.find(book.getTitle());
-
         get(BASE_URL + "/search?searchTerm=" + book.getTitle())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(actual.size()))
-                .andExpect(jsonPath("$[0].id").value(actual.get(0).getId().toString()))
-                .andExpect(jsonPath("$[0].title").value(actual.get(0).getTitle()))
-                .andExpect(jsonPath("$[0].author").value(actual.get(0).getAuthor()))
-                .andExpect(jsonPath("$[0].description").value(actual.get(0).getDescription()))
-                .andExpect(jsonPath("$[0].createdAt").value(actual.get(0).getCreatedAt().toString()))
-                .andExpect(jsonPath("$[0].updatedAt").value(actual.get(0).getUpdatedAt().toString()))
-                .andExpect(jsonPath("$[0].image").value(actual.get(0).getImage()))
-                .andExpect(jsonPath("$[0].userId").value(actual.get(0).getUserId().toString()));
+                .andExpect(jsonPath("$[0].id").value(book.getId().toString()))
+                .andExpect(jsonPath("$[0].title").value(book.getTitle()))
+                .andExpect(jsonPath("$[0].author").value(book.getAuthor()))
+                .andExpect(jsonPath("$[0].description").value(book.getDescription()))
+                .andExpect(jsonPath("$[0].createdAt").value(book.getCreatedAt().toString()))
+                .andExpect(jsonPath("$[0].updatedAt").value(book.getUpdatedAt().toString()))
+                .andExpect(jsonPath("$[0].image").value(book.getImage()))
+                .andExpect(jsonPath("$[0].userId").value(book.getUserId().toString()));
     }
 
     @Test
@@ -121,7 +120,7 @@ class BookControllerTest extends AbstractControllerTest {
 
         updatedBook.setId(bookNeedsToBeUpdated.getId());
 
-        when(bookService.update(any(), any())).thenReturn(updatedBook);
+        when(bookService.update(eq(bookNeedsToBeUpdated.getId()), any(Book.class))).thenReturn(updatedBook);
 
         put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), updatedBook)
                 .andExpect(status().isOk())
