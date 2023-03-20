@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 public class UserFakes {
+
     public static User buildUser() {
         return User.builder()
                 .id(UUID.randomUUID())

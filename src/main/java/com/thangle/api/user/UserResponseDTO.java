@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class UserResponseDTO {
+
     private UUID id;
     private String username;
     private String firstName;

@@ -26,6 +26,7 @@ import static com.thangle.api.user.UserResponseDTOMapper.toUserResponseDTO;
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc
 public class UserControllerTest extends AbstractControllerTest {
+
     private static final String BASE_URL = "/api/v1/users";
 
     @Autowired

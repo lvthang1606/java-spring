@@ -14,6 +14,7 @@ import static com.thangle.persistence.user.UserEntityMapper.*;
 @Repository
 @RequiredArgsConstructor
 public class UserStore {
+
     private final UserRepository userRepository;
 
     public List<User> findAll() {
