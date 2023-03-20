@@ -9,8 +9,8 @@ import java.util.*;
 @Repository
 public interface BookRepository extends CrudRepository<BookEntity, UUID> {
 
-    @Query(value = "SELECT DISTINCT * FROM books WHERE LOWER(title) LIKE LOWER(CONCAT('%', :searchTerm, '%'))" +
-            "OR LOWER(author) LIKE LOWER(CONCAT('%', :searchTerm, '%'))" +
-            "OR LOWER(description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    @Query(value = "SELECT * FROM books WHERE title ILIKE CONCAT('%', :searchTerm, '%')" +
+            "OR author ILIKE CONCAT('%', :searchTerm, '%')" +
+            "OR description ILIKE CONCAT('%', :searchTerm, '%')")
     List<BookEntity> find(final String searchTerm);
 }

@@ -29,11 +29,7 @@ public class BookStore {
         return toBooks(bookRepository.find(searchTerm));
     }
 
-    public Book create(final Book book) {
-        return toBook(bookRepository.save(toBookEntity(book)));
-    }
-
-    public Book update(final Book book) {
+    public Book save(final Book book) {
         return toBook(bookRepository.save(toBookEntity(book)));
     }
 

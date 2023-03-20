@@ -1,5 +1,7 @@
 package com.thangle.domain.book;
 
+import com.thangle.error.BadRequestException;
+import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -63,13 +65,37 @@ class BookServiceTest {
     @Test
     void shouldCreate_OK() {
         final var book = buildBook();
-        when(bookStore.create(book)).thenReturn(book);
+        when(bookStore.save(book)).thenReturn(book);
 
         final var updatedBook = bookService.create(book);
 
         assertEquals(book, updatedBook);
 
-        verify(bookStore).create(book);
+        verify(bookStore).save(book);
+    }
+
+    @Test
+    void shouldCreate_WithTitleEmpty() {
+        final var book = buildBook();
+        book.setTitle("");
+
+        assertThrows(BadRequestException.class, () -> bookService.create(book));
+    }
+
+    @Test
+    void shouldCreate_WithAuthorEmpty() {
+        final var book = buildBook();
+        book.setAuthor("");
+
+        assertThrows(BadRequestException.class, () -> bookService.create(book));
+    }
+
+    @Test
+    void shouldCreate_WithUserIdNull() {
+        final var book = buildBook();
+        book.setUserId(null);
+
+        assertThrows(BadRequestException.class, () -> bookService.create(book));
     }
 
     @Test
@@ -78,7 +104,7 @@ class BookServiceTest {
         final var updatedBook = buildUpdatedBook(book.getId());
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
-        when(bookStore.update(book)).thenReturn(updatedBook);
+        when(bookStore.save(book)).thenReturn(updatedBook);
 
         final var actual = bookService.update(book.getId(), updatedBook);
         assertEquals(updatedBook.getId(), actual.getId());
@@ -89,6 +115,49 @@ class BookServiceTest {
         assertEquals(updatedBook.getUpdatedAt(), actual.getUpdatedAt());
         assertEquals(updatedBook.getImage(), actual.getImage());
         assertEquals(updatedBook.getUserId(), actual.getUserId());
+    }
+
+    @Test
+    void shouldUpdate_ThrowsNotFound() {
+        final var book = buildBook();
+        final var updatedBook = buildUpdatedBook(book.getId());
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> bookService.update(book.getId(), updatedBook));
+    }
+
+    @Test
+    void shouldUpdate_WithTitleEmpty() {
+        final var book = buildBook();
+        final var updatedBook = buildUpdatedBook(book.getId());
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
+        updatedBook.setTitle("");
+
+        assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
+    }
+
+    @Test
+    void shouldUpdate_WithAuthorEmpty() {
+        final var book = buildBook();
+        final var updatedBook = buildUpdatedBook(book.getId());
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
+        updatedBook.setAuthor("");
+
+        assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
+    }
+
+    @Test
+    void shouldUpdate_WithUserIdNull() {
+        final var book = buildBook();
+        final var updatedBook = buildUpdatedBook(book.getId());
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
+        updatedBook.setUserId(null);
+
+        assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
     }
 
     @Test

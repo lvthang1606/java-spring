@@ -33,7 +33,7 @@ public class BookService {
     public Book create(final Book book) {
         validateBook(book);
         book.setCreatedAt(Instant.now());
-        return bookStore.create(book);
+        return bookStore.save(book);
     }
 
     public Book update(final UUID id, final Book updatedBook) {
@@ -47,7 +47,7 @@ public class BookService {
         book.setImage(updatedBook.getImage());
         book.setUserId(updatedBook.getUserId());
 
-        return bookStore.update(book);
+        return bookStore.save(book);
     }
 
     public void deleteById(final UUID id) {
