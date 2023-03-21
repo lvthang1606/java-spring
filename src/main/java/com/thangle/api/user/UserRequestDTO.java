@@ -13,7 +13,7 @@ public class UserRequestDTO {
     private String password;
     private String firstName;
     private String lastName;
-    private Boolean enabled;
+    private boolean enabled;
     private String avatar;
     private UUID roleId;
 }

@@ -18,7 +18,7 @@ public class UserEntityMapperTest {
         assertEquals(userEntity.getFirstName(), user.getFirstName());
         assertEquals(userEntity.getLastName(), user.getLastName());
         assertEquals(userEntity.getAvatar(), user.getAvatar());
-        assertEquals(userEntity.getEnabled(), user.getEnabled());
+        assertEquals(userEntity.isEnabled(), user.isEnabled());
         assertEquals(userEntity.getRoleId(), user.getRoleId());
     }
 
@@ -35,11 +35,11 @@ public class UserEntityMapperTest {
         final var user = buildUser();
         final var userEntity = toUserEntity(user);
 
-        assertEquals(userEntity.getUsername(), user.getUsername());
-        assertEquals(userEntity.getPassword(), user.getPassword());
-        assertEquals(userEntity.getFirstName(), user.getFirstName());
-        assertEquals(userEntity.getLastName(), user.getLastName());
-        assertEquals(userEntity.getAvatar(), user.getAvatar());
-        assertEquals(userEntity.getRoleId(), user.getRoleId());
+        assertEquals(user.getUsername(), userEntity.getUsername());
+        assertEquals(user.getPassword(), userEntity.getPassword());
+        assertEquals(user.getFirstName(), userEntity.getFirstName());
+        assertEquals(user.getLastName(), userEntity.getLastName());
+        assertEquals(user.getAvatar(), userEntity.getAvatar());
+        assertEquals(user.getRoleId(), userEntity.getRoleId());
     }
 }

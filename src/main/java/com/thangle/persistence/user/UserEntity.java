@@ -26,7 +26,7 @@ public class UserEntity {
     private String password;
     private String firstName;
     private String lastName;
-    private Boolean enabled;
+    private boolean enabled;
     private String avatar;
     private Instant createdAt;
     private Instant updatedAt;

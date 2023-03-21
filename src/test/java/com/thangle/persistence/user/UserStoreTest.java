@@ -75,34 +75,19 @@ public class UserStoreTest {
     }
 
     @Test
-    void shouldCreate_OK() {
+    void shouldSave_OK() {
         final var expected = buildUserEntity();
         when(userRepository.save(any())).thenReturn(expected);
 
         final var actual = userStore.save(buildUser());
 
-        assertEquals(actual.getId(), expected.getId());
-        assertEquals(actual.getUsername(), expected.getUsername());
-        assertEquals(actual.getPassword(), expected.getPassword());
-        assertEquals(actual.getFirstName(), expected.getFirstName());
-        assertEquals(actual.getLastName(), expected.getLastName());
-        assertEquals(actual.getAvatar(), expected.getAvatar());
-        assertEquals(actual.getRoleId(), expected.getRoleId());
-    }
-
-    @Test
-    void shouldUpdate_OK() {
-        final var expected = buildUserEntity();
-        when(userRepository.save(any())).thenReturn(expected);
-
-        final var actual = userStore.save(buildUser());
-        assertEquals(actual.getId(), expected.getId());
-        assertEquals(actual.getUsername(), expected.getUsername());
-        assertEquals(actual.getPassword(), expected.getPassword());
-        assertEquals(actual.getFirstName(), expected.getFirstName());
-        assertEquals(actual.getLastName(), expected.getLastName());
-        assertEquals(actual.getAvatar(), expected.getAvatar());
-        assertEquals(actual.getRoleId(), expected.getRoleId());
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getUsername(), actual.getUsername());
+        assertEquals(expected.getPassword(), actual.getPassword());
+        assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getLastName(), actual.getLastName());
+        assertEquals(expected.getAvatar(), actual.getAvatar());
+        assertEquals(expected.getRoleId(), actual.getRoleId());
     }
 
     @Test

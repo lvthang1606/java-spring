@@ -16,7 +16,7 @@ public class UserResponseDTOMapper {
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .enabled(user.getEnabled())
+                .enabled(user.isEnabled())
                 .avatar(user.getAvatar())
                 .roleId(user.getRoleId())
                 .build();

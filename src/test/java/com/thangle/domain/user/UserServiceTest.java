@@ -63,7 +63,7 @@ class UserServiceTest {
         assertEquals(expected.getPassword(), actual.getPassword());
         assertEquals(expected.getFirstName(), actual.getFirstName());
         assertEquals(expected.getLastName(), actual.getLastName());
-        assertEquals(expected.getEnabled(), actual.getEnabled());
+        assertEquals(expected.isEnabled(), actual.isEnabled());
         assertEquals(expected.getAvatar(), actual.getAvatar());
         assertEquals(expected.getRoleId(), actual.getRoleId());
     }

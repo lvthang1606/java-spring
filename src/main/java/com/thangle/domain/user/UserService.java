@@ -40,14 +40,6 @@ public class UserService {
         return userStore.save(user);
     }
 
-    private String setFieldValue(final String oldValue, final String newValue) {
-        if (isNotBlank(newValue)) {
-            return newValue;
-        }
-
-        return oldValue;
-    }
-
     public User update(final UUID id, final User updatedUser) {
         final User user = findById(id);
 
@@ -56,15 +48,14 @@ public class UserService {
             user.setUsername(updatedUser.getUsername());
         }
 
-        user.setPassword(setFieldValue(user.getPassword(), updatedUser.getPassword()));
-        user.setFirstName(setFieldValue(user.getFirstName(), updatedUser.getFirstName()));
-        user.setLastName(setFieldValue(user.getLastName(), updatedUser.getLastName()));
-        user.setAvatar(setFieldValue(user.getAvatar(), updatedUser.getAvatar()));
-
-        if (updatedUser.getEnabled() != null) {
-            user.setEnabled(updatedUser.getEnabled());
+        if (isNotBlank(updatedUser.getPassword())) {
+            user.setPassword(updatedUser.getPassword());
         }
 
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setEnabled(updatedUser.isEnabled());
+        user.setAvatar(updatedUser.getAvatar());
         user.setUpdatedAt(Instant.now());
 
         return userStore.save(user);

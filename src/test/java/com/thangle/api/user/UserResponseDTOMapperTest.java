@@ -28,6 +28,6 @@ public class UserResponseDTOMapperTest {
         final var users = buildUsers();
         final var userResponseDTOs = toUserResponseDTOs(users);
 
-        assertEquals(userResponseDTOs.size(), users.size());
+        assertEquals(users.size(), userResponseDTOs.size());
     }
 }

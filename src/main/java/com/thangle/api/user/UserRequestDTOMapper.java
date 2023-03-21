@@ -12,7 +12,7 @@ public class UserRequestDTOMapper {
                 .password(userRequestDTO.getPassword())
                 .firstName(userRequestDTO.getFirstName())
                 .lastName(userRequestDTO.getLastName())
-                .enabled(userRequestDTO.getEnabled())
+                .enabled(userRequestDTO.isEnabled())
                 .avatar(userRequestDTO.getAvatar())
                 .roleId(userRequestDTO.getRoleId())
                 .build();
@@ -24,7 +24,7 @@ public class UserRequestDTOMapper {
                 .password(user.getPassword())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .enabled(user.getEnabled())
+                .enabled(user.isEnabled())
                 .avatar(user.getAvatar())
                 .roleId(user.getRoleId())
                 .build();

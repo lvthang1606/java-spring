@@ -14,13 +14,13 @@ public class UserRequestDTOMapperTest {
         final var userRequestDTO = buildUserRequestDTO();
         final var user = toUser(userRequestDTO);
 
-        assertEquals(user.getUsername(), userRequestDTO.getUsername());
-        assertEquals(user.getPassword(), userRequestDTO.getPassword());
-        assertEquals(user.getFirstName(), userRequestDTO.getFirstName());
-        assertEquals(user.getLastName(), userRequestDTO.getLastName());
-        assertEquals(user.getEnabled(), userRequestDTO.getEnabled());
-        assertEquals(user.getAvatar(), userRequestDTO.getAvatar());
-        assertEquals(user.getRoleId(), userRequestDTO.getRoleId());
+        assertEquals(userRequestDTO.getUsername(), user.getUsername());
+        assertEquals(userRequestDTO.getPassword(), user.getPassword());
+        assertEquals(userRequestDTO.getFirstName(), user.getFirstName());
+        assertEquals(userRequestDTO.getLastName(), user.getLastName());
+        assertEquals(userRequestDTO.isEnabled(), user.isEnabled());
+        assertEquals(userRequestDTO.getAvatar(), user.getAvatar());
+        assertEquals(userRequestDTO.getRoleId(), user.getRoleId());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class UserRequestDTOMapperTest {
         assertEquals(user.getPassword(), userRequestDTO.getPassword());
         assertEquals(user.getFirstName(), userRequestDTO.getFirstName());
         assertEquals(user.getLastName(), userRequestDTO.getLastName());
-        assertEquals(user.getEnabled(), userRequestDTO.getEnabled());
+        assertEquals(user.isEnabled(), userRequestDTO.isEnabled());
         assertEquals(user.getAvatar(), userRequestDTO.getAvatar());
         assertEquals(user.getRoleId(), userRequestDTO.getRoleId());
     }

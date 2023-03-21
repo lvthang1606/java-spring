@@ -87,7 +87,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(user.getLastName()))
                 .andExpect(jsonPath("$.avatar").value(user.getAvatar()))
-                .andExpect(jsonPath("$.enabled").value(user.getEnabled()))
+                .andExpect(jsonPath("$.enabled").value(user.isEnabled()))
                 .andExpect(jsonPath("$.roleId").value(user.getRoleId().toString()));
 
     }
@@ -107,7 +107,7 @@ public class UserControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.username").value(updatedUser.getUsername()))
                 .andExpect(jsonPath("$.firstName").value(updatedUser.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(updatedUser.getLastName()))
-                .andExpect(jsonPath("$.enabled").value(updatedUser.getEnabled()))
+                .andExpect(jsonPath("$.enabled").value(updatedUser.isEnabled()))
                 .andExpect(jsonPath("$.avatar").value(updatedUser.getAvatar()))
                 .andExpect(jsonPath("$.roleId").value(updatedUser.getRoleId().toString()));
 
