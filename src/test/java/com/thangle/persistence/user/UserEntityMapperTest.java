@@ -7,6 +7,7 @@ import static com.thangle.persistence.user.UserEntityMapper.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserEntityMapperTest {
+
     @Test
     void shouldToUser_OK() {
         final var userEntity = buildUserEntity();

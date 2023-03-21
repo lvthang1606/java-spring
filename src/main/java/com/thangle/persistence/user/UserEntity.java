@@ -3,6 +3,7 @@ package com.thangle.persistence.user;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.With;
 import lombok.experimental.SuperBuilder;
 
 import org.springframework.data.annotation.Id;
@@ -16,7 +17,9 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@With
 public class UserEntity {
+
     @Id
     private UUID id;
     private String username;

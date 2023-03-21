@@ -10,22 +10,25 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import static com.thangle.fakes.UserFakes.buildUsers;
 import static com.thangle.fakes.UserFakes.buildUser;
-import static com.thangle.api.user.UserDTOMapper.toUserDTO;
+import static com.thangle.api.user.UserResponseDTOMapper.toUserResponseDTO;
+import static com.thangle.api.user.UserRequestDTOMapper.toUserRequestDTO;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc
 public class UserControllerTest extends AbstractControllerTest {
+
     private static final String BASE_URL = "/api/v1/users";
 
     @Autowired
@@ -74,10 +77,11 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     void shouldCreate_OK() throws Exception{
         final var user = buildUser();
+        final var userRequestDTO = toUserRequestDTO(user);
 
-        when(userService.create(any(User.class))).thenReturn(user);
+        when(userService.create(argThat(x -> x.getUsername().equals(userRequestDTO.getUsername())))).thenReturn(user);
 
-        post(BASE_URL, toUserDTO(user))
+        post(BASE_URL, userRequestDTO)
                 .andExpect(jsonPath("$.id").value(user.getId().toString()))
                 .andExpect(jsonPath("$.username").value(user.getUsername()))
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
@@ -91,12 +95,13 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     void shouldUpdate_OK() throws Exception {
         final var userNeedsToBeUpdated = buildUser();
-        final var updatedUser = buildUser();
-        updatedUser.setId(userNeedsToBeUpdated.getId());
+        final var updatedUser = buildUser().withId(userNeedsToBeUpdated.getId());
+        final var userRequestDTO = toUserRequestDTO(updatedUser);
 
-        when(userService.update(any(), any())).thenReturn(updatedUser);
+        when(userService.update(eq(userNeedsToBeUpdated.getId()), argThat(x -> x.getUsername().equals(userRequestDTO.getUsername()))))
+                .thenReturn(updatedUser);
 
-        put(BASE_URL + "/" + userNeedsToBeUpdated.getId(), toUserDTO(updatedUser))
+        put(BASE_URL + "/" + userNeedsToBeUpdated.getId(), userRequestDTO)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(updatedUser.getId().toString()))
                 .andExpect(jsonPath("$.username").value(updatedUser.getUsername()))

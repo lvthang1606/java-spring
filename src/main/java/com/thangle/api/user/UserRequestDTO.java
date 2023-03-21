@@ -1,27 +1,19 @@
-package com.thangle.domain.user;
+package com.thangle.api.user;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.With;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Getter
-@Setter
 @Builder
-@With
-public class User {
+public class UserRequestDTO {
 
-    private UUID id;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private Boolean enabled;
     private String avatar;
-    private Instant createdAt;
-    private Instant updatedAt;
     private UUID roleId;
 }

@@ -9,6 +9,7 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 @UtilityClass
 public class UserEntityMapper {
+
     public static User toUser(final UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.getId())
