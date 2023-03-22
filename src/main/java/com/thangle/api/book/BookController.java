@@ -13,7 +13,7 @@ import static com.thangle.api.book.BookResponseDTOMapper.*;
 import static com.thangle.api.book.BookRequestDTOMapper.*;
 
 @RestController
-@RequestMapping("/api/v1/books")
+@RequestMapping("api/v1/books")
 @RequiredArgsConstructor
 public class BookController {
 
