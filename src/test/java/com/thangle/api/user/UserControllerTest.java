@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.thangle.fakes.UserFakes.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,11 +20,6 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import static com.thangle.fakes.UserFakes.buildUsers;
-import static com.thangle.fakes.UserFakes.buildUser;
-import static com.thangle.api.user.UserResponseDTOMapper.toUserResponseDTO;
-import static com.thangle.api.user.UserRequestDTOMapper.toUserRequestDTO;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc
@@ -77,7 +73,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     void shouldCreate_OK() throws Exception{
         final var user = buildUser();
-        final var userRequestDTO = toUserRequestDTO(user);
+        final var userRequestDTO = buildUserRequestDTO();
 
         when(userService.create(argThat(x -> x.getUsername().equals(userRequestDTO.getUsername())))).thenReturn(user);
 
@@ -96,7 +92,7 @@ public class UserControllerTest extends AbstractControllerTest {
     void shouldUpdate_OK() throws Exception {
         final var userNeedsToBeUpdated = buildUser();
         final var updatedUser = buildUser().withId(userNeedsToBeUpdated.getId());
-        final var userRequestDTO = toUserRequestDTO(updatedUser);
+        final var userRequestDTO = buildUserRequestDTO();
 
         when(userService.update(eq(userNeedsToBeUpdated.getId()), argThat(x -> x.getUsername().equals(userRequestDTO.getUsername()))))
                 .thenReturn(updatedUser);

@@ -17,16 +17,4 @@ public class UserRequestDTOMapper {
                 .roleId(userRequestDTO.getRoleId())
                 .build();
     }
-
-    public static UserRequestDTO toUserRequestDTO(final User user) {
-        return UserRequestDTO.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .enabled(user.isEnabled())
-                .avatar(user.getAvatar())
-                .roleId(user.getRoleId())
-                .build();
-    }
 }

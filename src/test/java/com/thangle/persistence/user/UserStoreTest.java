@@ -16,6 +16,8 @@ import static org.mockito.Mockito.when;
 
 import static com.thangle.persistence.user.UserEntityMapper.*;
 
+import static java.util.UUID.randomUUID;
+
 @ExtendWith(MockitoExtension.class)
 public class UserStoreTest {
 
@@ -38,12 +40,12 @@ public class UserStoreTest {
 
     @Test
     void shouldFindById_OK() {
-        final var userEntity = buildUserEntity();
-        final var foundUserEntity = buildUserEntity().withId(userEntity.getId());
+        final var id = randomUUID();
+        final var foundUserEntity = buildUserEntity().withId(id);
 
-        when(userRepository.findById(userEntity.getId())).thenReturn(Optional.of(foundUserEntity));
+        when(userRepository.findById(id)).thenReturn(Optional.of(foundUserEntity));
 
-        final var actual = userStore.findById(userEntity.getId());
+        final var actual = userStore.findById(id);
         final var expected = toUser(foundUserEntity);
 
         assertEquals(expected.getId(), actual.get().getId());
