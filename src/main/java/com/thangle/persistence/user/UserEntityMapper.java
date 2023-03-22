@@ -9,6 +9,7 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 @UtilityClass
 public class UserEntityMapper {
+
     public static User toUser(final UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.getId())
@@ -16,7 +17,7 @@ public class UserEntityMapper {
                 .password(userEntity.getPassword())
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
-                .enabled(userEntity.getEnabled())
+                .enabled(userEntity.isEnabled())
                 .avatar(userEntity.getAvatar())
                 .createdAt(userEntity.getCreatedAt())
                 .updatedAt(userEntity.getUpdatedAt())
@@ -30,7 +31,7 @@ public class UserEntityMapper {
                 .password(user.getPassword())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .enabled(user.getEnabled())
+                .enabled(user.isEnabled())
                 .avatar(user.getAvatar())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())

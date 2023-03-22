@@ -14,6 +14,7 @@ import static com.thangle.persistence.user.UserEntityMapper.*;
 @Repository
 @RequiredArgsConstructor
 public class UserStore {
+
     private final UserRepository userRepository;
 
     public List<User> findAll() {
@@ -29,12 +30,8 @@ public class UserStore {
                 .map(UserEntityMapper::toUser);
     }
 
-    public User create(final User user) {
+    public User save(final User user) {
         return toUser(userRepository.save(toUserEntity(user)));
-    }
-
-    public User update(final User updatedUser) {
-        return toUser(userRepository.save(toUserEntity(updatedUser)));
     }
 
     public void delete(final UUID id) {

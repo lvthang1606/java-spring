@@ -1,10 +1,14 @@
 package com.thangle.domain.user;
 
+import com.thangle.error.BadRequestException;
+import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
+
     @Mock
     private UserStore userStore;
 
@@ -45,24 +50,61 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldFindById_OK() {
+        final var user = buildUser();
+        final var expected = buildUser().withId(user.getId());
+
+        when(userStore.findById(user.getId())).thenReturn(Optional.of(expected));
+
+        final var actual = userService.findById(user.getId());
+
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getUsername(), actual.getUsername());
+        assertEquals(expected.getPassword(), actual.getPassword());
+        assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getLastName(), actual.getLastName());
+        assertEquals(expected.isEnabled(), actual.isEnabled());
+        assertEquals(expected.getAvatar(), actual.getAvatar());
+        assertEquals(expected.getRoleId(), actual.getRoleId());
+    }
+
+    @Test
+    void shouldFindById_ThrowsNotFoundException() {
+        final var user = buildUser();
+
+        when(userStore.findById(user.getId())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> userService.findById(user.getId()));
+    }
+
+    @Test
     void shouldCreate_OK() {
         final var user = buildUser();
-        when(userStore.create(user)).thenReturn(user);
+        when(userStore.save(user)).thenReturn(user);
 
         final var createdUser = userService.create(user);
 
         assertEquals(user, createdUser);
-        verify(userStore).create(user);
+        verify(userStore).save(user);
+    }
+
+    @Test
+    void shouldCreate_ThrowsBadRequestException() {
+        final var user = buildUser();
+        final var foundUser = buildUser().withUsername(user.getUsername());
+
+        when(userStore.findByUsername(user.getUsername())).thenReturn(Optional.of(foundUser));
+
+        assertThrows(BadRequestException.class, () -> userService.create(user));
     }
 
     @Test
     void shouldUpdate_OK() {
         final var user = buildUser();
-        final var updatedUser = buildUser();
-        updatedUser.setId(user.getId());
+        final var updatedUser = buildUser().withId(user.getId());
 
         when(userStore.findById(user.getId())).thenReturn(Optional.of(user));
-        when(userStore.update(user)).thenReturn(updatedUser);
+        when(userStore.save(user)).thenReturn(updatedUser);
 
         final var expected = userService.update(user.getId(), user);
 
@@ -73,6 +115,16 @@ class UserServiceTest {
         assertEquals(expected.getLastName(), updatedUser.getLastName());
         assertEquals(expected.getAvatar(), updatedUser.getAvatar());
         assertEquals(expected.getRoleId(), updatedUser.getRoleId());
+    }
+
+    @Test
+    void shouldUpdate_ThrowsBadRequestException() {
+        final var user = buildUser();
+        final var foundUser = buildUser().withUsername(user.getUsername());
+
+        when(userStore.findByUsername(user.getUsername())).thenReturn(Optional.of(foundUser));
+
+        assertThrows(BadRequestException.class, () -> userService.create(user));
     }
 
     @Test

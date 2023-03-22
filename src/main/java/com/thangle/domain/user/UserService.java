@@ -11,8 +11,7 @@ import java.util.UUID;
 
 import com.thangle.persistence.user.UserStore;
 import static com.thangle.domain.user.UserError.supplyUserNotFound;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,8 @@ public class UserService {
 
     public User create(final User user) {
         verifyUsernameAvailable(user.getUsername());
-        return userStore.create(user);
+        user.setCreatedAt(Instant.now());
+        return userStore.save(user);
     }
 
     public User update(final UUID id, final User updatedUser) {
@@ -48,18 +48,17 @@ public class UserService {
             user.setUsername(updatedUser.getUsername());
         }
 
-        if (isBlank(updatedUser.getPassword())) {
-            throw new BadRequestException("Password cannot be empty");
+        if (isNotBlank(updatedUser.getPassword())) {
+            user.setPassword(updatedUser.getPassword());
         }
 
-        user.setPassword(updatedUser.getPassword());
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
-        user.setEnabled(updatedUser.getEnabled());
+        user.setEnabled(updatedUser.isEnabled());
         user.setAvatar(updatedUser.getAvatar());
         user.setUpdatedAt(Instant.now());
 
-        return userStore.update(user);
+        return userStore.save(user);
     }
 
     public void delete(final UUID id) {
