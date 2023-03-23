@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.thangle.persistence.user.UserEntityMapper.toUserEntity;
+import static com.thangle.domain.role.RoleError.supplyRoleNotFound;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,8 @@ public class JWTUserDetailsService implements UserDetailsService {
     }
 
     private User buildUser(final UserEntity userEntity) {
-        final Role role = roleStore.findById(userEntity.getRoleId());
+        final var roleId = userEntity.getRoleId();
+        final Role role = roleStore.findById(roleId).orElseThrow(supplyRoleNotFound(roleId));
         return new JWTUserDetails(
                 userEntity.getId(),
                 userEntity.getUsername(),
