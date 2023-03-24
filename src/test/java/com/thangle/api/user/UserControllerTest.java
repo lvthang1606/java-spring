@@ -1,14 +1,21 @@
 package com.thangle.api.user;
 
 import com.thangle.api.AbstractControllerTest;
+import com.thangle.api.WithMockAdmin;
+import com.thangle.api.WithMockContributor;
+import com.thangle.api.book.BookController;
+import com.thangle.domain.auth.AuthsProvider;
 import com.thangle.domain.user.UserService;
 import com.thangle.domain.user.User;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thangle.fakes.UserFakes.*;
@@ -27,13 +34,14 @@ public class UserControllerTest extends AbstractControllerTest {
 
     private static final String BASE_URL = "/api/v1/users";
 
-    @Autowired
-    private MockMvc mvc;
-
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private AuthsProvider authsProvider;
+
     @Test
+    @WithMockAdmin
     public void shouldFindAll_OK() throws Exception {
         final var users = buildUsers();
 
@@ -53,6 +61,7 @@ public class UserControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockAdmin
     void shouldFindById_OK() throws Exception {
         final var user = buildUser();
 
@@ -71,6 +80,7 @@ public class UserControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockAdmin
     void shouldCreate_OK() throws Exception{
         final var user = buildUser();
         final var userRequestDTO = buildUserRequestDTO();
@@ -85,10 +95,10 @@ public class UserControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.avatar").value(user.getAvatar()))
                 .andExpect(jsonPath("$.enabled").value(user.isEnabled()))
                 .andExpect(jsonPath("$.roleId").value(user.getRoleId().toString()));
-
     }
 
     @Test
+    @WithMockAdmin
     void shouldUpdate_OK() throws Exception {
         final var userNeedsToBeUpdated = buildUser();
         final var updatedUser = buildUser().withId(userNeedsToBeUpdated.getId());
@@ -111,6 +121,7 @@ public class UserControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockAdmin
     void shouldDeleteById_OK() throws Exception {
         final var user = buildUser();
 

@@ -1,11 +1,13 @@
 package com.thangle.domain.user;
 
+import com.thangle.domain.auth.AuthsProvider;
 import com.thangle.error.BadRequestException;
 import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import static com.thangle.fakes.UserFakes.buildUser;
 import static com.thangle.fakes.UserFakes.buildUsers;
 import com.thangle.persistence.user.UserStore;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,6 +31,12 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
+
+    @Mock
+    private AuthsProvider authsProvider;
+
+    @Spy
+    private PasswordEncoder passwordEncoder;
 
     @Test
     void shouldFindAll_OK(){
@@ -80,11 +89,12 @@ class UserServiceTest {
     @Test
     void shouldCreate_OK() {
         final var user = buildUser();
+
         when(userStore.save(user)).thenReturn(user);
 
         final var createdUser = userService.create(user);
 
-        assertEquals(user, createdUser);
+        assertEquals(createdUser, user);
         verify(userStore).save(user);
     }
 

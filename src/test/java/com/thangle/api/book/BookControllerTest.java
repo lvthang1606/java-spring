@@ -1,11 +1,18 @@
 package com.thangle.api.book;
 
 import com.thangle.api.AbstractControllerTest;
+import com.thangle.api.WithMockAdmin;
+import com.thangle.api.WithMockContributor;
+import com.thangle.domain.auth.AuthsProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thangle.fakes.BookFakes.*;
@@ -28,13 +35,19 @@ class BookControllerTest extends AbstractControllerTest {
 
     private static final String BASE_URL = "/api/v1/books";
 
-    @Autowired
-    protected MockMvc mvc;
+    @MockBean
+    private AuthsProvider authsProvider;
 
     @MockBean
     private BookService bookService;
 
+    @BeforeEach
+    void init() {
+        when(authsProvider.getCurrentAuthentication()).thenCallRealMethod();
+    }
+
     @Test
+    @WithMockUser
     void shouldFindAll_OK() throws Exception {
         final var books = buildBooks();
 
@@ -56,6 +69,7 @@ class BookControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     void shouldFindById_OK() throws Exception {
         final var book = buildBook();
 
@@ -76,6 +90,7 @@ class BookControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     void shouldFindByTitleAuthorDescription_OK() throws Exception {
         final var book = buildBook();
 
@@ -94,7 +109,8 @@ class BookControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void shouldCreate_OK() throws Exception {
+    @WithMockAdmin
+    void shouldCreateWithRoleAdmin_OK() throws Exception {
         final var book = buildBook();
         final var bookRequestDTO = toBookRequestDTO(book);
 
@@ -114,7 +130,41 @@ class BookControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void shouldUpdate_OK() throws Exception {
+    @WithMockContributor
+    void shouldCreateWithRoleContributor_OK() throws Exception {
+        final var book = buildBook();
+        final var bookRequestDTO = toBookRequestDTO(book);
+
+        when(bookService.create(argThat(x -> x.getTitle().equals(bookRequestDTO.getTitle()))))
+                .thenReturn(book);
+
+        post(BASE_URL, bookRequestDTO)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(book.getId().toString()))
+                .andExpect(jsonPath("$.title").value(book.getTitle()))
+                .andExpect(jsonPath("$.author").value(book.getAuthor()))
+                .andExpect(jsonPath("$.description").value(book.getDescription()))
+                .andExpect(jsonPath("$.createdAt").value(book.getCreatedAt().toString()))
+                .andExpect(jsonPath("$.updatedAt").value(book.getUpdatedAt().toString()))
+                .andExpect(jsonPath("$.image").value(book.getImage()))
+                .andExpect(jsonPath("$.userId").value(book.getUserId().toString()));
+    }
+
+    @Test
+    void shouldCreateWithoutRole_ThrowsUnauthorizedException() throws Exception {
+        final var book = buildBook();
+        final var bookRequestDTO = toBookRequestDTO(book);
+
+        when(bookService.create(argThat(x -> x.getTitle().equals(bookRequestDTO.getTitle()))))
+                .thenReturn(book);
+
+        post(BASE_URL, bookRequestDTO)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockAdmin
+    void shouldUpdateWithRoleAdmin_OK() throws Exception {
         final var bookNeedsToBeUpdated = buildBook();
         final var updatedBook = buildBook().withId(bookNeedsToBeUpdated.getId());
         final var bookRequestDTO = toBookRequestDTO(updatedBook);
@@ -135,12 +185,67 @@ class BookControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void shouldDeleteById_OK() throws Exception {
+    @WithMockContributor
+    void shouldUpdateWithRoleContributor_OK() throws Exception {
+        final var bookNeedsToBeUpdated = buildBook();
+        final var updatedBook = buildBook().withId(bookNeedsToBeUpdated.getId());
+        final var bookRequestDTO = toBookRequestDTO(updatedBook);
+
+        when(bookService.update(eq(bookNeedsToBeUpdated.getId()), argThat(x -> x.getTitle().equals(bookRequestDTO.getTitle()))))
+                .thenReturn(updatedBook);
+
+        put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), bookRequestDTO)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(updatedBook.getId().toString()))
+                .andExpect(jsonPath("$.title").value(updatedBook.getTitle()))
+                .andExpect(jsonPath("$.author").value(updatedBook.getAuthor()))
+                .andExpect(jsonPath("$.description").value(updatedBook.getDescription()))
+                .andExpect(jsonPath("$.createdAt").value(updatedBook.getCreatedAt().toString()))
+                .andExpect(jsonPath("$.updatedAt").value(updatedBook.getUpdatedAt().toString()))
+                .andExpect(jsonPath("$.image").value(updatedBook.getImage()))
+                .andExpect(jsonPath("$.userId").value(updatedBook.getUserId().toString()));
+    }
+
+    @Test
+    void shouldUpdateWithoutRole_ThrowsUnauthorizedException() throws Exception {
+        final var bookNeedsToBeUpdated = buildBook();
+        final var updatedBook = buildBook().withId(bookNeedsToBeUpdated.getId());
+        final var bookRequestDTO = toBookRequestDTO(updatedBook);
+
+        when(bookService.update(eq(bookNeedsToBeUpdated.getId()), argThat(x -> x.getTitle().equals(bookRequestDTO.getTitle()))))
+                .thenReturn(updatedBook);
+
+        put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), bookRequestDTO)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockAdmin
+    void shouldDeleteByIdWithRoleAdmin_OK() throws Exception {
         final var book = buildBook();
 
         delete(BASE_URL + "/" + book.getId())
                 .andExpect(status().isOk());
 
         verify(bookService).deleteById(book.getId());
+    }
+
+    @Test
+    @WithMockContributor
+    void shouldDeleteByIdWithRoleContributor_OK() throws Exception {
+        final var book = buildBook();
+
+        delete(BASE_URL + "/" + book.getId())
+                .andExpect(status().isOk());
+
+        verify(bookService).deleteById(book.getId());
+    }
+
+    @Test
+    void shouldDeleteByIdWithoutRole_ThrowsUnauthorizedException() throws Exception {
+        final var book = buildBook();
+
+        delete(BASE_URL + "/" + book.getId())
+                .andExpect(status().isUnauthorized());
     }
 }

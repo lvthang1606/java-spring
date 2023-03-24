@@ -1,5 +1,7 @@
 package com.thangle.domain.book;
 
+import com.thangle.domain.auth.AuthsProvider;
+import com.thangle.error.AccessDeniedException;
 import com.thangle.error.BadRequestException;
 import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import static org.mockito.Mockito.when;
 
 import com.thangle.persistence.book.BookStore;
 
+import static com.thangle.fakes.UserAuthenticationTokenFakes.*;
+
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +27,9 @@ class BookServiceTest {
 
     @Mock
     private BookStore bookStore;
+
+    @Mock
+    private AuthsProvider authsProvider;
 
     @InjectMocks
     private BookService bookService;
@@ -63,9 +70,25 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldCreate_OK() {
+    void shouldCreateWithRoleAdmin_OK() {
         final var book = buildBook();
+
         when(bookStore.save(book)).thenReturn(book);
+        when(authsProvider.getCurrentUserId()).thenReturn(buildAdmin().getUserId());
+
+        final var updatedBook = bookService.create(book);
+
+        assertEquals(book, updatedBook);
+
+        verify(bookStore).save(book);
+    }
+
+    @Test
+    void shouldCreateWithRoleContributor_OK() {
+        final var book = buildBook();
+
+        when(bookStore.save(book)).thenReturn(book);
+        when(authsProvider.getCurrentUserId()).thenReturn(buildContributor().getUserId());
 
         final var updatedBook = bookService.create(book);
 
@@ -96,12 +119,18 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldUpdate_OK() {
+    void shouldUpdateWithRoleAdmin_OK() {
         final var book = buildBook();
         final var updatedBook = buildBook().withId(book.getId());
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
         when(bookStore.save(book)).thenReturn(updatedBook);
+
+        when(authsProvider.getCurrentUserId()).thenReturn(buildAdmin().getUserId());
+        when(authsProvider.getCurrentUserRole()).thenReturn(buildAdmin().getRole());
+
+        book.setUserId(authsProvider.getCurrentUserId());
+        updatedBook.setUserId(authsProvider.getCurrentUserId());
 
         final var actual = bookService.update(book.getId(), updatedBook);
         assertEquals(updatedBook.getId(), actual.getId());
@@ -112,6 +141,43 @@ class BookServiceTest {
         assertEquals(updatedBook.getUpdatedAt(), actual.getUpdatedAt());
         assertEquals(updatedBook.getImage(), actual.getImage());
         assertEquals(updatedBook.getUserId(), actual.getUserId());
+    }
+
+    @Test
+    void shouldUpdateWithRoleContributor_OK() {
+        final var book = buildBook();
+        final var updatedBook = buildBook().withId(book.getId());
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
+        when(bookStore.save(book)).thenReturn(updatedBook);
+
+        when(authsProvider.getCurrentUserId()).thenReturn(buildContributor().getUserId());
+        when(authsProvider.getCurrentUserRole()).thenReturn(buildContributor().getRole());
+
+        book.setUserId(authsProvider.getCurrentUserId());
+        updatedBook.setUserId(authsProvider.getCurrentUserId());
+
+        final var actual = bookService.update(book.getId(), updatedBook);
+        assertEquals(updatedBook.getId(), actual.getId());
+        assertEquals(updatedBook.getTitle(), actual.getTitle());
+        assertEquals(updatedBook.getAuthor(), actual.getAuthor());
+        assertEquals(updatedBook.getDescription(), actual.getDescription());
+        assertEquals(updatedBook.getCreatedAt(), actual.getCreatedAt());
+        assertEquals(updatedBook.getUpdatedAt(), actual.getUpdatedAt());
+        assertEquals(updatedBook.getImage(), actual.getImage());
+        assertEquals(updatedBook.getUserId(), actual.getUserId());
+    }
+
+    @Test
+    void shouldUpdate_ThrowsAccessDeniedException() {
+        final var book = buildBook();
+        final var updatedBook = buildBook();
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
+        when(authsProvider.getCurrentUserId()).thenReturn(UUID.randomUUID());
+        when(authsProvider.getCurrentUserRole()).thenReturn(buildContributor().getRole());
+
+        assertThrows(AccessDeniedException.class, () -> bookService.update(book.getId(), updatedBook));
     }
 
     @Test
@@ -161,12 +227,43 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldDeleteById_OK() {
+    void shouldDeleteByIdWithRoleAdmin_OK() {
         final var book = buildBook();
+
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
+        when(authsProvider.getCurrentUserId()).thenReturn(buildAdmin().getUserId());
+        when(authsProvider.getCurrentUserRole()).thenReturn(buildAdmin().getRole());
+
+        book.setUserId(authsProvider.getCurrentUserId());
 
         bookService.deleteById(book.getId());
 
         verify(bookStore).deleteById(book.getId());
+    }
+
+    @Test
+    void shouldDeleteByIdWithRoleContributor_OK() {
+        final var book = buildBook();
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
+        when(authsProvider.getCurrentUserId()).thenReturn(buildContributor().getUserId());
+        when(authsProvider.getCurrentUserRole()).thenReturn(buildContributor().getRole());
+
+        book.setUserId(authsProvider.getCurrentUserId());
+
+        bookService.deleteById(book.getId());
+
+        verify(bookStore).deleteById(book.getId());
+    }
+
+    @Test
+    void shouldDeleteById_ThrowsAccessDeniedException() {
+        final var book = buildBook();
+
+        when(bookStore.findById(book.getId())).thenReturn(Optional.of(book));
+        when(authsProvider.getCurrentUserId()).thenReturn(UUID.randomUUID());
+        when(authsProvider.getCurrentUserRole()).thenReturn(buildContributor().getRole());
+
+        assertThrows(AccessDeniedException.class, () -> bookService.deleteById(book.getId()));
     }
 }

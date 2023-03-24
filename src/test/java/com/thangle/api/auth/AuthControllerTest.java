@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthControllerTest.class)
+@WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class AuthControllerTest extends AbstractControllerTest {
 
@@ -34,7 +34,7 @@ public class AuthControllerTest extends AbstractControllerTest {
         final var auth = buildAuth();
         final var token = randomAlphabetic(3, 10);
 
-        when(authenticationManager.authenticate(auth)).thenReturn(auth);
+        when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(auth);
         when(jwtTokenService.generateToken((JWTUserDetails) auth.getPrincipal())).thenReturn(token);
 
         post(BASE_URL, auth)

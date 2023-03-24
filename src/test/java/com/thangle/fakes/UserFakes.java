@@ -3,6 +3,7 @@ package com.thangle.fakes;
 import com.thangle.api.user.UserRequestDTO;
 import com.thangle.domain.user.User;
 import com.thangle.persistence.user.UserEntity;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import java.util.stream.IntStream;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
+@UtilityClass
 public class UserFakes {
 
     public static User buildUser() {

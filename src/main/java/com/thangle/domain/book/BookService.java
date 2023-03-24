@@ -64,7 +64,7 @@ public class BookService {
     public void deleteById(final UUID id) {
         final Book book = findById(id);
 
-        validateBookActionPermissions(book, Action.UPDATE);
+        validateBookActionPermissions(book, Action.DELETE);
 
         bookStore.deleteById(book.getId());
     }
