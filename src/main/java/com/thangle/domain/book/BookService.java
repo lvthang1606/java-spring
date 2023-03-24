@@ -1,11 +1,13 @@
 package com.thangle.domain.book;
 
+import com.thangle.domain.auth.AuthsProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.thangle.persistence.book.BookStore;
 
 import static com.thangle.domain.book.BookError.supplyBookNotFound;
+import static com.thangle.error.CommonError.supplyAccessDeniedError;
 import static com.thangle.domain.book.BookValidation.validateBook;
 
 import java.time.Instant;
@@ -16,7 +18,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookService {
 
+    enum Action {
+        UPDATE,
+        DELETE
+    }
+
     private final BookStore bookStore;
+    private final AuthsProvider authsProvider;
 
     public List<Book> findAll() {
         return bookStore.findAll();
@@ -32,6 +40,7 @@ public class BookService {
 
     public Book create(final Book book) {
         validateBook(book);
+        book.setUserId(authsProvider.getCurrentUserId());
         book.setCreatedAt(Instant.now());
         return bookStore.save(book);
     }
@@ -39,6 +48,8 @@ public class BookService {
     public Book update(final UUID id, final Book updatedBook) {
         final Book book = findById(id);
         validateBook(updatedBook);
+
+        validateBookActionPermissions(book, Action.UPDATE);
 
         book.setTitle(updatedBook.getTitle());
         book.setAuthor(updatedBook.getAuthor());
@@ -52,6 +63,16 @@ public class BookService {
 
     public void deleteById(final UUID id) {
         final Book book = findById(id);
+
+        validateBookActionPermissions(book, Action.UPDATE);
+
         bookStore.deleteById(book.getId());
+    }
+
+    private void validateBookActionPermissions(final Book book, final Action action) {
+        if (authsProvider.getCurrentUserRole().equals("ROLE_CONTRIBUTOR")
+                && !authsProvider.getCurrentUserId().equals(book.getUserId())) {
+            throw supplyAccessDeniedError("You are not authorized to " + action.name().toLowerCase() + " this book").get();
+        }
     }
 }

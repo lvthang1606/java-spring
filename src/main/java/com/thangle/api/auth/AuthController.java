@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.thangle.api.auth.LoginDTOMapper.toAuthentication;
 
 @RestController
-@RequestMapping("api/v1/auths")
+@RequestMapping("/api/v1/auths")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
-    public JWTTokenResponseDTO login(@RequestBody LoginDTO loginDTO) {
+    public JWTTokenResponseDTO login(final @RequestBody LoginDTO loginDTO) {
         final Authentication authentication = authenticationManager.authenticate(toAuthentication(loginDTO));
 
         return JWTTokenResponseDTO.builder()

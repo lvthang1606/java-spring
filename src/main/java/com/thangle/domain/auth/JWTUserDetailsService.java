@@ -26,7 +26,7 @@ public class JWTUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userStore.findUserByUsername(username)
+        return userStore.findByUsername(username)
                 .map(user -> buildUser(toUserEntity(user)))
                 .orElseThrow(() -> new UsernameNotFoundException("User with username %s cannot be found" + username));
     }
