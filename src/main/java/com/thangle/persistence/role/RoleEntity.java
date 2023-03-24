@@ -1,10 +1,7 @@
 package com.thangle.persistence.role;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Table(name = "roles")
 @AllArgsConstructor
 @NoArgsConstructor
+@With
 public class RoleEntity {
 
     @Id
