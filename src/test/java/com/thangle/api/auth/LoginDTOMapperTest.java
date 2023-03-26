@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class LoginDTOMapperTest {
     @Test
     void shouldToAuthentication_OK() {
-        LoginDTO loginDTO = LoginDTO.builder()
+        final LoginDTO loginDTO = LoginDTO.builder()
                 .username("admin")
                 .password("123")
                 .build();
 
-        Authentication authentication = LoginDTOMapper.toAuthentication(loginDTO);
+        final Authentication authentication = LoginDTOMapper.toAuthentication(loginDTO);
 
         assertEquals(loginDTO.getUsername(), authentication.getPrincipal());
         assertEquals(loginDTO.getPassword(), authentication.getCredentials());

@@ -5,20 +5,20 @@ import lombok.experimental.UtilityClass;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import java.util.Collections;
 import java.util.UUID;
 
+import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @UtilityClass
-public class AuthFakes {
+public class AuthenticationFakes {
 
-    public static Authentication buildAuth() {
+    public static Authentication buildAuthentication() {
         JWTUserDetails userDetails = new JWTUserDetails(
                 UUID.randomUUID(),
                 randomAlphabetic(3, 10),
                 randomAlphabetic(3, 10),
-                Collections.emptyList()
+                emptyList()
         );
         return new UsernamePasswordAuthenticationToken(
                 userDetails,

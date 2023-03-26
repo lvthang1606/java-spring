@@ -11,7 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static com.thangle.fakes.AuthFakes.buildAuth;
+import static com.thangle.fakes.AuthenticationFakes.buildAuthentication;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,7 +31,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     void shouldLogin_OK() throws Exception {
-        final var auth = buildAuth();
+        final var auth = buildAuthentication();
         final var token = randomAlphabetic(3, 10);
 
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(auth);

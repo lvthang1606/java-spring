@@ -49,6 +49,7 @@ class UserServiceTest {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.get(0).getId(), actual.get(0).getId());
         assertEquals(expected.get(0).getUsername(), actual.get(0).getUsername());
+        assertEquals(passwordEncoder.encode(expected.get(0).getPassword()), passwordEncoder.encode(actual.get(0).getPassword()));
         assertEquals(expected.get(0).getPassword(), actual.get(0).getPassword());
         assertEquals(expected.get(0).getFirstName(), actual.get(0).getFirstName());
         assertEquals(expected.get(0).getLastName(), actual.get(0).getLastName());
@@ -111,7 +112,11 @@ class UserServiceTest {
     @Test
     void shouldUpdate_OK() {
         final var user = buildUser();
-        final var updatedUser = buildUser().withId(user.getId());
+        final var updatedUser = buildUser()
+                .withId(user.getId())
+                .withRoleId(user.getRoleId());
+
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 
         when(userStore.findById(user.getId())).thenReturn(Optional.of(user));
         when(userStore.save(user)).thenReturn(updatedUser);
