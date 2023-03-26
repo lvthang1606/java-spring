@@ -18,11 +18,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookService {
 
-    enum Action {
-        UPDATE,
-        DELETE
-    }
-
     private final BookStore bookStore;
     private final AuthsProvider authsProvider;
 
@@ -72,7 +67,7 @@ public class BookService {
     private void validateBookActionPermission(final Book book) {
         if (authsProvider.getCurrentUserRole().equals("ROLE_CONTRIBUTOR")
                 && !authsProvider.getCurrentUserId().equals(book.getUserId())) {
-            throw supplyAccessDeniedError("You are not authorized to update this book").get();
+            throw supplyAccessDeniedError().get();
         }
     }
 }

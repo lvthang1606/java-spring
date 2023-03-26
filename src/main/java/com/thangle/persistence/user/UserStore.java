@@ -55,12 +55,6 @@ public class UserStore {
         return userRepository.findByUsername(username).map(UserEntityMapper::toUser);
     }
 
-    public Optional<User> findUserByUsername(final String username) {
-        return fakeUsers.stream()
-                .filter(user -> equalsIgnoreCase(user.getUsername(), username))
-                .findFirst();
-    }
-
     public User save(final User user) {
         return toUser(userRepository.save(toUserEntity(user)));
     }

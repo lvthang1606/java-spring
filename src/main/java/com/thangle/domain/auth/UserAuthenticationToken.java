@@ -25,6 +25,6 @@ public class UserAuthenticationToken extends UsernamePasswordAuthenticationToken
         this.role = this.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
-                .orElseThrow(supplyForbiddenError("You do not have permission to access this resource"));
+                .orElseThrow(supplyForbiddenError());
     }
 }
