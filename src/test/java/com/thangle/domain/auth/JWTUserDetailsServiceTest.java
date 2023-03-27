@@ -2,10 +2,11 @@ package com.thangle.domain.auth;
 
 import com.thangle.persistence.role.RoleStore;
 import com.thangle.persistence.user.UserStore;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -14,7 +15,6 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 import static com.thangle.fakes.UserFakes.buildUser;
 import static com.thangle.fakes.RoleFakes.buildRole;
 
@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
+@ExtendWith(MockitoExtension.class)
 public class JWTUserDetailsServiceTest {
 
     @Mock
@@ -32,12 +33,6 @@ public class JWTUserDetailsServiceTest {
 
     @InjectMocks
     private JWTUserDetailsService jwtUserDetailsService;
-
-    @BeforeEach
-    public void setup() {
-        openMocks(this);
-        jwtUserDetailsService = new JWTUserDetailsService(userStore, roleStore);
-    }
 
     @Test
     void shouldLoadUserByUsername_OK() {

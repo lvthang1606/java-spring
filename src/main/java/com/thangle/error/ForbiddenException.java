@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class ForbiddenException extends DomainException {
 
-    public ForbiddenException(final Object... args) {
-        super(HttpStatus.FORBIDDEN, "You do not have permission to access this resource", args);
+    public ForbiddenException() {
+        super(HttpStatus.FORBIDDEN, "You do not have permission to access this resource");
     }
 }

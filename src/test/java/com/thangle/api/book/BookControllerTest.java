@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thangle.fakes.BookFakes.*;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -159,7 +160,8 @@ class BookControllerTest extends AbstractControllerTest {
                 .thenReturn(book);
 
         post(BASE_URL, bookRequestDTO)
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().reason(containsString("Unauthorized")));
     }
 
     @Test
@@ -216,7 +218,8 @@ class BookControllerTest extends AbstractControllerTest {
                 .thenReturn(updatedBook);
 
         put(BASE_URL + "/" + bookNeedsToBeUpdated.getId(), bookRequestDTO)
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().reason(containsString("Unauthorized")));
     }
 
     @Test
@@ -246,6 +249,7 @@ class BookControllerTest extends AbstractControllerTest {
         final var book = buildBook();
 
         delete(BASE_URL + "/" + book.getId())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().reason(containsString("Unauthorized")));
     }
 }

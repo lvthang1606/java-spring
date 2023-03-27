@@ -4,14 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.thangle.fakes.LoginFakes.buildLoginDTO;
 
 public class LoginDTOMapperTest {
     @Test
     void shouldToAuthentication_OK() {
-        final LoginDTO loginDTO = LoginDTO.builder()
-                .username("admin")
-                .password("123")
-                .build();
+        final LoginDTO loginDTO = buildLoginDTO();
 
         final Authentication authentication = LoginDTOMapper.toAuthentication(loginDTO);
 

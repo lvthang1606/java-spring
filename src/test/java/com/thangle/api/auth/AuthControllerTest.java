@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static com.thangle.fakes.AuthenticationFakes.buildAuthentication;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,5 +41,8 @@ public class AuthControllerTest extends AbstractControllerTest {
         post(BASE_URL, auth)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value(token));
+
+        verify(authenticationManager).authenticate(any(Authentication.class));
+        verify(jwtTokenService).generateToken((JWTUserDetails) auth.getPrincipal());
     }
 }
