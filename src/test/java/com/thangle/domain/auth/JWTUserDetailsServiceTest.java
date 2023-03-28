@@ -1,5 +1,6 @@
 package com.thangle.domain.auth;
 
+import com.thangle.error.NotFoundException;
 import com.thangle.persistence.role.RoleStore;
 import com.thangle.persistence.user.UserStore;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ public class JWTUserDetailsServiceTest {
 
         when(userStore.findByUsername(username)).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () -> jwtUserDetailsService.loadUserByUsername(username));
+        assertThrows(NotFoundException.class, () -> jwtUserDetailsService.loadUserByUsername(username));
 
         verify(userStore).findByUsername(username);
     }
