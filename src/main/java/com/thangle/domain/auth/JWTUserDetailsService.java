@@ -1,13 +1,13 @@
 package com.thangle.domain.auth;
 
 import com.thangle.domain.role.Role;
+import com.thangle.error.NotFoundException;
 import com.thangle.persistence.role.RoleStore;
 import com.thangle.persistence.user.UserStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +22,10 @@ public class JWTUserDetailsService implements UserDetailsService {
     private final RoleStore roleStore;
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws NotFoundException {
         return userStore.findByUsername(username)
                 .map(this::buildUser)
-                .orElseThrow(() -> new UsernameNotFoundException("User with username" + username + "cannot be found"));
+                .orElseThrow(() -> new NotFoundException("User with username %s cannot be found", username));
     }
 
     private UserDetails buildUser(final com.thangle.domain.user.User user) {

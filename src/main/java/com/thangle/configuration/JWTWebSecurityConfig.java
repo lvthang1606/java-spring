@@ -23,9 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JWTWebSecurityConfig {
 
     private static final String[] SWAGGER_RESOURCES = {
+            "/swagger-resources/**",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
+            "/v2/api-docs/**",
+            "/webjars/**"
     };
 
     private static final String[] LOGIN_RESOURCE = {
