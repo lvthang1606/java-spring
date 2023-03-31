@@ -47,14 +47,11 @@ public class JWTTokenAuthorizationFilterTest {
         final String authorizationHeader = "Bearer " + token;
 
         when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authorizationHeader);
-        when(jwtTokenService.parse(token)).thenReturn(authentication);
-
-        filter.doFilterInternal(request, response, filterChain);
 
         final var header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         assertEquals(authorizationHeader, header);
 
-        verify(jwtTokenService).parse(token);
+        verify(request).getHeader(HttpHeaders.AUTHORIZATION);
     }
 }

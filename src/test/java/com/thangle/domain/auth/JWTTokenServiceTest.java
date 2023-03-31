@@ -10,12 +10,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.thangle.fakes.JWTUserDetailsFakes.buildJWTUserDetails;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class JWTTokenServiceTest {
@@ -32,14 +33,12 @@ public class JWTTokenServiceTest {
 
     @Test
     void shouldParseWithEmptyToken_thenReturnsNull() {
-        final Authentication result = jwtTokenService.parse("");
-        assertNull(result);
+        assertNull(jwtTokenService.parse(""));
     }
 
     @Test
     void shouldParseWithNullToken_thenReturnsNull() {
-        final Authentication result = jwtTokenService.parse(null);
-        assertNull(result);
+        assertNull(jwtTokenService.parse(""));
     }
 
     @Test

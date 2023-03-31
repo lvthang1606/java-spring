@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.thangle.persistence.book.BookStore;
 
 import static com.thangle.domain.book.BookError.supplyBookNotFound;
-import static com.thangle.error.CommonError.supplyAccessDeniedError;
+import static com.thangle.error.CommonError.supplyForbiddenError;
 import static com.thangle.domain.book.BookValidation.validateBook;
 
 import java.time.Instant;
@@ -67,7 +67,7 @@ public class BookService {
     private void validateBookActionPermission(final Book book) {
         if (authsProvider.getCurrentUserRole().equals("ROLE_CONTRIBUTOR")
                 && !authsProvider.getCurrentUserId().equals(book.getUserId())) {
-            throw supplyAccessDeniedError().get();
+            throw supplyForbiddenError().get();
         }
     }
 }

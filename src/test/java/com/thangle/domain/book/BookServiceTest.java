@@ -1,7 +1,7 @@
 package com.thangle.domain.book;
 
 import com.thangle.domain.auth.AuthsProvider;
-import com.thangle.error.AccessDeniedException;
+import com.thangle.error.ForbiddenException;
 import com.thangle.error.BadRequestException;
 import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -187,7 +187,7 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldUpdate_ThrowsAccessDeniedException() {
+    void shouldUpdate_ThrowsForbiddenException() {
         final var book = buildBook();
         final var updatedBook = buildBook();
 
@@ -197,7 +197,7 @@ class BookServiceTest {
         when(authsProvider.getCurrentUserId()).thenReturn(UUID.randomUUID());
         when(authsProvider.getCurrentUserRole()).thenReturn(user.getRole());
 
-        assertThrows(AccessDeniedException.class, () -> bookService.update(book.getId(), updatedBook));
+        assertThrows(ForbiddenException.class, () -> bookService.update(book.getId(), updatedBook));
 
         verify(bookStore).findById(book.getId());
 
@@ -300,7 +300,7 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldDeleteById_ThrowsAccessDeniedException() {
+    void shouldDeleteById_ThrowsForbiddenException() {
         final var book = buildBook();
         final var user = buildContributor();
 
@@ -308,7 +308,7 @@ class BookServiceTest {
         when(authsProvider.getCurrentUserId()).thenReturn(UUID.randomUUID());
         when(authsProvider.getCurrentUserRole()).thenReturn(user.getRole());
 
-        assertThrows(AccessDeniedException.class, () -> bookService.deleteById(book.getId()));
+        assertThrows(ForbiddenException.class, () -> bookService.deleteById(book.getId()));
 
         verify(bookStore).findById(book.getId());
 
