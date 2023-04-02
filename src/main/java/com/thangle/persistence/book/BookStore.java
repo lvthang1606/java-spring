@@ -2,8 +2,10 @@ package com.thangle.persistence.book;
 
 import com.thangle.domain.book.Book;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.IterableUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,6 +33,16 @@ public class BookStore {
 
     public Book save(final Book book) {
         return toBook(bookRepository.save(toBookEntity(book)));
+    }
+
+    public List<Book> saveAll(final List<Book> books) {
+        List<BookEntity> bookEntities = new ArrayList<>();
+
+        for (Book book : books) {
+            bookEntities.add(toBookEntity(book));
+        }
+
+        return toBooks(IterableUtils.toList(bookRepository.saveAll(bookEntities)));
     }
 
     public void deleteById(final UUID id) {

@@ -43,6 +43,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation "org.apache.commons:commons-collections4:4.4"
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.poi:poi-ooxml:5.2.2'
 
     testAnnotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -50,6 +51,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 
     runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'mysql:mysql-connector-java'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
