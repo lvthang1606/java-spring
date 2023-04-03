@@ -63,7 +63,7 @@ public class BookController {
     @PreAuthorize("hasAnyRole('ADMIN', 'CONTRIBUTOR')")
     @Operation(summary = "Import books from Excel")
     @PostMapping("/import")
-    public List<BookResponseDTO> uploadFile(final @RequestParam(value = "file", required = false) MultipartFile file) {
+    public List<BookResponseDTO> uploadFile(final @RequestParam(value = "file", required = true) MultipartFile file) {
         return toBookResponseDTOs(bookService.saveDataFromExcel(file));
     }
 }

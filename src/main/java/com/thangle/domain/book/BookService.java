@@ -51,10 +51,16 @@ public class BookService {
         validateBookActionPermission(book);
 
         book.setTitle(updatedBook.getTitle());
+        book.setSubtitle(updatedBook.getSubtitle());
         book.setAuthor(updatedBook.getAuthor());
+        book.setPublisher(updatedBook.getPublisher());
+        book.setIsbn13(updatedBook.getIsbn13());
         book.setDescription(updatedBook.getDescription());
         book.setUpdatedAt(Instant.now());
         book.setImage(updatedBook.getImage());
+        book.setPrice(updatedBook.getPrice());
+        book.setYear(updatedBook.getYear());
+        book.setRating(updatedBook.getRating());
         book.setUserId(updatedBook.getUserId());
 
         return bookStore.save(book);
