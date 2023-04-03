@@ -19,7 +19,9 @@ import static org.mockito.Mockito.when;
 import com.thangle.persistence.book.BookStore;
 
 import static com.thangle.fakes.UserAuthenticationTokenFakes.*;
+import static java.util.UUID.randomUUID;
 
+import java.io.*;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,11 +47,17 @@ class BookServiceTest {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.get(0).getId(), actual.get(0).getId());
         assertEquals(expected.get(0).getTitle(), actual.get(0).getTitle());
+        assertEquals(expected.get(0).getSubtitle(), actual.get(0).getSubtitle());
         assertEquals(expected.get(0).getAuthor(), actual.get(0).getAuthor());
+        assertEquals(expected.get(0).getPublisher(), actual.get(0).getPublisher());
+        assertEquals(expected.get(0).getIsbn13(), actual.get(0).getIsbn13());
         assertEquals(expected.get(0).getDescription(), actual.get(0).getDescription());
         assertEquals(expected.get(0).getCreatedAt(), actual.get(0).getCreatedAt());
         assertEquals(expected.get(0).getUpdatedAt(), actual.get(0).getUpdatedAt());
         assertEquals(expected.get(0).getImage(), actual.get(0).getImage());
+        assertEquals(expected.get(0).getPrice(), actual.get(0).getPrice());
+        assertEquals(expected.get(0).getYear(), actual.get(0).getYear());
+        assertEquals(expected.get(0).getRating(), actual.get(0).getRating());
         assertEquals(expected.get(0).getUserId(), actual.get(0).getUserId());
 
         verify(bookStore).findAll();
@@ -141,11 +149,17 @@ class BookServiceTest {
         final var actual = bookService.update(book.getId(), updatedBook);
         assertEquals(updatedBook.getId(), actual.getId());
         assertEquals(updatedBook.getTitle(), actual.getTitle());
+        assertEquals(updatedBook.getSubtitle(), actual.getSubtitle());
         assertEquals(updatedBook.getAuthor(), actual.getAuthor());
+        assertEquals(updatedBook.getPublisher(), actual.getPublisher());
+        assertEquals(updatedBook.getIsbn13(), actual.getIsbn13());
         assertEquals(updatedBook.getDescription(), actual.getDescription());
         assertEquals(updatedBook.getCreatedAt(), actual.getCreatedAt());
         assertEquals(updatedBook.getUpdatedAt(), actual.getUpdatedAt());
         assertEquals(updatedBook.getImage(), actual.getImage());
+        assertEquals(updatedBook.getPrice(), actual.getPrice());
+        assertEquals(updatedBook.getYear(), actual.getYear());
+        assertEquals(updatedBook.getRating(), actual.getRating());
         assertEquals(updatedBook.getUserId(), actual.getUserId());
 
         verify(bookStore).findById(book.getId());
@@ -173,11 +187,17 @@ class BookServiceTest {
         final var actual = bookService.update(book.getId(), updatedBook);
         assertEquals(updatedBook.getId(), actual.getId());
         assertEquals(updatedBook.getTitle(), actual.getTitle());
+        assertEquals(updatedBook.getSubtitle(), actual.getSubtitle());
         assertEquals(updatedBook.getAuthor(), actual.getAuthor());
+        assertEquals(updatedBook.getPublisher(), actual.getPublisher());
+        assertEquals(updatedBook.getIsbn13(), actual.getIsbn13());
         assertEquals(updatedBook.getDescription(), actual.getDescription());
         assertEquals(updatedBook.getCreatedAt(), actual.getCreatedAt());
         assertEquals(updatedBook.getUpdatedAt(), actual.getUpdatedAt());
         assertEquals(updatedBook.getImage(), actual.getImage());
+        assertEquals(updatedBook.getPrice(), actual.getPrice());
+        assertEquals(updatedBook.getYear(), actual.getYear());
+        assertEquals(updatedBook.getRating(), actual.getRating());
         assertEquals(updatedBook.getUserId(), actual.getUserId());
 
         verify(bookStore).findById(book.getId());
@@ -314,5 +334,22 @@ class BookServiceTest {
 
         verify(authsProvider).getCurrentUserId();
         verify(authsProvider).getCurrentUserRole();
+    }
+
+    @Test
+    void shouldSaveDateFromExcel_OK() {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("import.xlsx");
+
+        List<Book> bookList = ImportBookHelper.extractDataFromInputStream(inputStream, randomUUID());
+
+        assertEquals("title", bookList.get(0).getTitle());
+        assertEquals("subtitle", bookList.get(0).getSubtitle());
+        assertEquals("author", bookList.get(0).getAuthor());
+        assertEquals("publisher", bookList.get(0).getPublisher());
+        assertEquals("description", bookList.get(0).getDescription());
+        assertEquals("image", bookList.get(0).getImage());
+        assertEquals("50.0", bookList.get(0).getPrice().toString());
+        assertEquals("1998", bookList.get(0).getYear().toString());
+        assertEquals("5.0", bookList.get(0).getRating().toString());
     }
 }
