@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
-
-import javax.persistence.Index;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table(value = "books")
+@Entity
+@Table(name = "books", indexes = @Index(name = "isbn_index", columnList = "isbn13", unique = true))
 @Getter
 @SuperBuilder
 @NoArgsConstructor
@@ -20,11 +18,13 @@ import java.util.UUID;
 public class BookEntity {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     private UUID id;
     private String title;
     private String subtitle;
     private String author;
     private String publisher;
+    @Column(name = "isbn13")
     private Long isbn13;
     private String description;
     private Instant createdAt;
