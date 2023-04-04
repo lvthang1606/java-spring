@@ -12,7 +12,6 @@ public class BookRequestDTOMapper {
                 .author(bookRequestDTO.getAuthor())
                 .description(bookRequestDTO.getDescription())
                 .image(bookRequestDTO.getImage())
-                .userId(bookRequestDTO.getUserId())
                 .build();
     }
 
@@ -22,7 +21,6 @@ public class BookRequestDTOMapper {
                 .author(book.getAuthor())
                 .description(book.getDescription())
                 .image(book.getImage())
-                .userId(book.getUserId())
                 .build();
     }
 }
