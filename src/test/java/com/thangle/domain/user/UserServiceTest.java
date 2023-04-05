@@ -1,11 +1,13 @@
 package com.thangle.domain.user;
 
+import com.thangle.domain.auth.AuthsProvider;
 import com.thangle.error.BadRequestException;
 import com.thangle.error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import static com.thangle.fakes.UserFakes.buildUser;
 import static com.thangle.fakes.UserFakes.buildUsers;
 import com.thangle.persistence.user.UserStore;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,6 +32,12 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    @Mock
+    private AuthsProvider authsProvider;
+
+    @Spy
+    private PasswordEncoder passwordEncoder;
+
     @Test
     void shouldFindAll_OK(){
         final var expected = buildUsers();
@@ -40,6 +49,7 @@ class UserServiceTest {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.get(0).getId(), actual.get(0).getId());
         assertEquals(expected.get(0).getUsername(), actual.get(0).getUsername());
+        assertEquals(passwordEncoder.encode(expected.get(0).getPassword()), passwordEncoder.encode(actual.get(0).getPassword()));
         assertEquals(expected.get(0).getPassword(), actual.get(0).getPassword());
         assertEquals(expected.get(0).getFirstName(), actual.get(0).getFirstName());
         assertEquals(expected.get(0).getLastName(), actual.get(0).getLastName());
@@ -80,11 +90,12 @@ class UserServiceTest {
     @Test
     void shouldCreate_OK() {
         final var user = buildUser();
+
         when(userStore.save(user)).thenReturn(user);
 
         final var createdUser = userService.create(user);
 
-        assertEquals(user, createdUser);
+        assertEquals(createdUser, user);
         verify(userStore).save(user);
     }
 
@@ -101,7 +112,11 @@ class UserServiceTest {
     @Test
     void shouldUpdate_OK() {
         final var user = buildUser();
-        final var updatedUser = buildUser().withId(user.getId());
+        final var updatedUser = buildUser()
+                .withId(user.getId())
+                .withRoleId(user.getRoleId());
+
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 
         when(userStore.findById(user.getId())).thenReturn(Optional.of(user));
         when(userStore.save(user)).thenReturn(updatedUser);

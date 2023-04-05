@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static com.thangle.fakes.UserFakes.*;
 import static org.mockito.Mockito.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -55,6 +55,8 @@ public class UserStoreTest {
         assertEquals(expected.getLastName(), actual.get().getLastName());
         assertEquals(expected.getAvatar(), actual.get().getAvatar());
         assertEquals(expected.getRoleId(), actual.get().getRoleId());
+
+        verify(userRepository).findById(id);
     }
 
     @Test
@@ -74,6 +76,8 @@ public class UserStoreTest {
         assertEquals(expected.getLastName(), actual.get().getLastName());
         assertEquals(expected.getAvatar(), actual.get().getAvatar());
         assertEquals(expected.getRoleId(), actual.get().getRoleId());
+
+        verify(userRepository).findByUsername(userEntity.getUsername());
     }
 
     @Test
@@ -90,6 +94,8 @@ public class UserStoreTest {
         assertEquals(expected.getLastName(), actual.getLastName());
         assertEquals(expected.getAvatar(), actual.getAvatar());
         assertEquals(expected.getRoleId(), actual.getRoleId());
+
+        verify(userRepository).save(any());
     }
 
     @Test

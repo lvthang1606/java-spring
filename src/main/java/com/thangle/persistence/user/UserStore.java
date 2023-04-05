@@ -26,8 +26,7 @@ public class UserStore {
     }
 
     public Optional<User> findByUsername(final String username) {
-        return userRepository.findByUsername(username)
-                .map(UserEntityMapper::toUser);
+        return userRepository.findByUsername(username).map(UserEntityMapper::toUser);
     }
 
     public User save(final User user) {

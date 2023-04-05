@@ -13,5 +13,4 @@ public class BookRequestDTO {
     private String author;
     private String description;
     private String image;
-    private UUID userId;
 }

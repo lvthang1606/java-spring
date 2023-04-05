@@ -1,7 +1,9 @@
 package com.thangle.domain.user;
 
+import com.thangle.domain.auth.AuthsProvider;
 import com.thangle.error.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,6 +20,8 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class UserService {
 
     private final UserStore userStore;
+    private final AuthsProvider authsProvider;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userStore.findAll();
@@ -36,6 +40,7 @@ public class UserService {
 
     public User create(final User user) {
         verifyUsernameAvailable(user.getUsername());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(Instant.now());
         return userStore.save(user);
     }
@@ -49,7 +54,7 @@ public class UserService {
         }
 
         if (isNotBlank(updatedUser.getPassword())) {
-            user.setPassword(updatedUser.getPassword());
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
 
         user.setFirstName(updatedUser.getFirstName());
