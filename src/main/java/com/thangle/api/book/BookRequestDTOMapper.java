@@ -18,7 +18,6 @@ public class BookRequestDTOMapper {
                 .price(bookRequestDTO.getPrice())
                 .year(bookRequestDTO.getYear())
                 .rating(bookRequestDTO.getRating())
-                .userId(bookRequestDTO.getUserId())
                 .build();
     }
 
@@ -34,7 +33,6 @@ public class BookRequestDTOMapper {
                 .price(book.getPrice())
                 .year(book.getYear())
                 .rating(book.getRating())
-                .userId(book.getUserId())
                 .build();
     }
 }

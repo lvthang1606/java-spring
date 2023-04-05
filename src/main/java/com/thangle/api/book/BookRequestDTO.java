@@ -19,5 +19,4 @@ public class BookRequestDTO {
     private Double price;
     private Integer year;
     private Double rating;
-    private UUID userId;
 }

@@ -61,7 +61,6 @@ public class BookService {
         book.setPrice(updatedBook.getPrice());
         book.setYear(updatedBook.getYear());
         book.setRating(updatedBook.getRating());
-        book.setUserId(updatedBook.getUserId());
 
         return bookStore.save(book);
     }
