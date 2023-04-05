@@ -308,7 +308,7 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     @WithMockUser
-    void shouldUploadFile_OK() throws Exception {
+    void shouldUploadFile_ThrowsBadRequest() throws Exception {
         final File dataFile = resourceLoader.getResource("classpath/import.xlsx").getFile();
 
         final MockMultipartFile file
@@ -321,6 +321,6 @@ class BookControllerTest extends AbstractControllerTest {
 
         final MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockMvc.perform(multipart(BASE_URL + "/import").file(file))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 }

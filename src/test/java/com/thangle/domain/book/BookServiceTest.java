@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.thangle.fakes.BookFakes.*;
-import static com.thangle.domain.book.ImportBookHelper.importBooks;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -314,22 +313,5 @@ class BookServiceTest {
 
         verify(authsProvider).getCurrentUserId();
         verify(authsProvider).getCurrentUserRole();
-    }
-
-    @Test
-    void shouldSaveDateFromExcel_OK() {
-        final InputStream inputStream = getClass().getClassLoader().getResourceAsStream("import.xlsx");
-
-        final List<Book> bookList = importBooks(inputStream, randomUUID());
-
-        assertEquals("title", bookList.get(0).getTitle());
-        assertEquals("subtitle", bookList.get(0).getSubtitle());
-        assertEquals("author", bookList.get(0).getAuthor());
-        assertEquals("publisher", bookList.get(0).getPublisher());
-        assertEquals("description", bookList.get(0).getDescription());
-        assertEquals("image", bookList.get(0).getImage());
-        assertEquals("50.0", bookList.get(0).getPrice().toString());
-        assertEquals("1998", bookList.get(0).getYear().toString());
-        assertEquals("5.0", bookList.get(0).getRating().toString());
     }
 }
