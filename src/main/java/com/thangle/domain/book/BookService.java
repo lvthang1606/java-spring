@@ -1,19 +1,20 @@
 package com.thangle.domain.book;
 
 import com.thangle.domain.auth.AuthsProvider;
-import com.thangle.error.BadRequestException;
-import com.thangle.error.ForbiddenException;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.thangle.persistence.book.BookStore;
-import org.springframework.web.multipart.MultipartFile;
 
 import static com.thangle.domain.book.BookError.supplyBookNotFound;
 import static com.thangle.error.CommonError.supplyForbiddenError;
 import static com.thangle.domain.book.BookValidation.validateBook;
+import static com.thangle.domain.book.BookMapper.toBooks;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -73,19 +74,23 @@ public class BookService {
         bookStore.deleteById(book.getId());
     }
 
-    public List<Book> saveDataFromExcel(final MultipartFile file) {
-        final var currentUserId = authsProvider.getCurrentUserId();
+    public List<Book> saveDataFromExcel(final InputStream inputStream) {
+        final List<Object[]> objects;
 
-        if (ImportBookHelper.hasExcelFormat(file)) {
-            try {
-                List<Book> books = ImportBookHelper.extractDataFromInputStream(file.getInputStream(), currentUserId);
-                return bookStore.saveAll(books);
-            } catch (IOException exception) {
-                throw new ForbiddenException("Fails to access excel data");
-            }
-        } else {
-            throw new BadRequestException("The format of file %s is not accepted", file.getOriginalFilename());
+        try(final XSSFWorkbook workBook = new XSSFWorkbook(inputStream)) {
+            final XSSFSheet sheet = workBook.getSheetAt(0);
+            objects = ExcelReader.readTable(sheet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        final List<Book> books = toBooks(objects);
+        books.forEach(book -> {
+            book.setCreatedAt(Instant.now());
+            book.setUserId(authsProvider.getCurrentUserId());
+        });
+
+        return bookStore.saveAll(books);
     }
 
     private void validateBookActionPermission(final Book book) {

@@ -24,7 +24,6 @@ public class BookEntity {
     private String subtitle;
     private String author;
     private String publisher;
-    @Column(name = "isbn13")
     private Long isbn13;
     private String description;
     private Instant createdAt;

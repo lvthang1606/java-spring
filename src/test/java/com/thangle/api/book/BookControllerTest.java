@@ -309,9 +309,9 @@ class BookControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser
     void shouldUploadFile_OK() throws Exception {
-        File dataFile = resourceLoader.getResource("classpath/import.xlsx").getFile();
+        final File dataFile = resourceLoader.getResource("classpath/import.xlsx").getFile();
 
-        MockMultipartFile file
+        final MockMultipartFile file
                 = new MockMultipartFile(
                 "file",
                 "import.xlsx",
@@ -319,7 +319,7 @@ class BookControllerTest extends AbstractControllerTest {
                 dataFile.getAbsolutePath().getBytes()
         );
 
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        final MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockMvc.perform(multipart(BASE_URL + "/import").file(file))
                 .andExpect(status().isOk());
     }
