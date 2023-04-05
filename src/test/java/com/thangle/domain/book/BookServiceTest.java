@@ -124,13 +124,6 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldCreate_WithUserIdNull() {
-        final var book = buildBook().withUserId(null);
-
-        assertThrows(BadRequestException.class, () -> bookService.create(book));
-    }
-
-    @Test
     void shouldUpdateWithRoleAdmin_OK() {
         final var book = buildBook();
         final var updatedBook = buildBook().withId(book.getId());
@@ -257,20 +250,6 @@ class BookServiceTest {
         final var updatedBook = buildBook()
                                 .withId(book.getId())
                                 .withAuthor("");
-
-        when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
-
-        assertThrows(BadRequestException.class, () -> bookService.update(book.getId(), updatedBook));
-
-        verify(bookStore).findById(book.getId());
-    }
-
-    @Test
-    void shouldUpdate_WithUserIdNull() {
-        final var book = buildBook();
-        final var updatedBook = buildBook()
-                                .withId(book.getId())
-                                .withUserId(null);
 
         when(bookStore.findById(book.getId())).thenReturn(Optional.of(updatedBook));
 

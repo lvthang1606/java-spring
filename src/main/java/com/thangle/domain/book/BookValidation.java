@@ -13,7 +13,6 @@ public class BookValidation {
     public static void validateBook(final Book book) {
         validateTitle(book.getTitle());
         validateAuthor(book.getAuthor());
-        validateUserId(book.getUserId());
     }
 
     private void validateTitle(final String title) {
@@ -25,12 +24,6 @@ public class BookValidation {
     private void validateAuthor(final String author) {
         if (isBlank(author)) {
             throw new BadRequestException("Book's author cannot be empty");
-        }
-    }
-
-    private void validateUserId(final UUID userId) {
-        if (userId == null) {
-            throw new BadRequestException("User cannot be null");
         }
     }
 }
