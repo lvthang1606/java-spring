@@ -10,7 +10,13 @@ import java.util.UUID;
 public class BookRequestDTO {
 
     private String title;
+    private String subtitle;
     private String author;
+    private String publisher;
+    private Long isbn13;
     private String description;
     private String image;
+    private Double price;
+    private Integer year;
+    private Double rating;
 }

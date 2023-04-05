@@ -14,11 +14,17 @@ public class BookResponseDTOMapper {
         return BookResponseDTO.builder()
                 .id(book.getId())
                 .title(book.getTitle())
+                .subtitle(book.getSubtitle())
                 .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .isbn13(book.getIsbn13())
                 .description(book.getDescription())
                 .createdAt(book.getCreatedAt())
                 .updatedAt(book.getUpdatedAt())
                 .image(book.getImage())
+                .price(book.getPrice())
+                .year(book.getYear())
+                .rating(book.getRating())
                 .userId(book.getUserId())
                 .build();
     }

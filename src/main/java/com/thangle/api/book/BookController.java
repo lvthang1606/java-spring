@@ -1,17 +1,21 @@
 package com.thangle.api.book;
 
 import com.thangle.domain.book.BookService;
+import com.thangle.error.BadRequestException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import static com.thangle.api.book.BookResponseDTOMapper.*;
 import static com.thangle.api.book.BookRequestDTOMapper.*;
+import static com.thangle.domain.book.ExcelReader.hasExcelFormat;
 
 @RestController
 @RequestMapping("api/v1/books")
@@ -57,5 +61,16 @@ public class BookController {
     @DeleteMapping("{id}")
     public void deleteById(final @PathVariable UUID id) {
         bookService.deleteById(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'CONTRIBUTOR')")
+    @Operation(summary = "Import books from Excel")
+    @PostMapping("/import")
+    public List<BookResponseDTO> uploadFile(final @RequestParam(value = "file", required = true) MultipartFile file) throws IOException {
+        if (hasExcelFormat(file)) {
+            return toBookResponseDTOs(bookService.saveDataFromExcel(file.getInputStream()));
+        } else {
+            throw new BadRequestException("The format of file %s is not accepted", file.getOriginalFilename());
+        }
     }
 }

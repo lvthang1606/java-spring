@@ -17,11 +17,17 @@ public class BookResponseDTOMapperTest {
 
         assertEquals(book.getId(), bookDTO.getId());
         assertEquals(book.getTitle(), bookDTO.getTitle());
+        assertEquals(book.getSubtitle(), bookDTO.getSubtitle());
         assertEquals(book.getAuthor(), bookDTO.getAuthor());
+        assertEquals(book.getPublisher(), bookDTO.getPublisher());
+        assertEquals(book.getIsbn13(), bookDTO.getIsbn13());
         assertEquals(book.getDescription(), bookDTO.getDescription());
         assertEquals(book.getCreatedAt(), bookDTO.getCreatedAt());
         assertEquals(book.getUpdatedAt(), bookDTO.getUpdatedAt());
         assertEquals(book.getImage(), bookDTO.getImage());
+        assertEquals(book.getPrice(), bookDTO.getPrice());
+        assertEquals(book.getYear(), bookDTO.getYear());
+        assertEquals(book.getRating(), bookDTO.getRating());
         assertEquals(book.getUserId(), bookDTO.getUserId());
     }
 
